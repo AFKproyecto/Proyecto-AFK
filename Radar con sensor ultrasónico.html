@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAMPARA SENSIBLE TACTO</title>
+</head>
+<style>
+    /* Estilos Generales */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body, html {
+        font-family: Arial, sans-serif;
+        background-color: #0a0a0a;
+        color: #f2f2f2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        min-height: 100vh;
+        margin: 0;
+    }
+    header {
+        background-color: #000000;
+        color: rgb(243, 240, 240);
+        padding: 1em;
+        text-align: center;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        z-index: 10;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    header h1 {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+    /* Icono de menú hamburguesa */
+    .menu-icon {
+        display: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: white;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
+
+    /* Menú de Navegación */
+    nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+    nav ul li a {
+        color: rgb(223, 211, 211);
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.5em 1em;
+        border-radius: 8px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    nav ul li a:hover {
+        background-color: rgb(235, 226, 226);
+        color: #050a0f;
+    }
+    nav ul li:hover .submenu {
+        display: block;
+    }
+
+    /* Estilos del Submenú */
+    .submenu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #ffffff;
+        color: #000;
+        padding: 10px 0;
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+    }
+    .submenu li {
+        padding: 5px 20px;
+    }
+    .submenu li a {
+        color: #000;
+        font-weight: normal;
+    }
+    .submenu li a:hover {
+        background-color: #f0f0f0;
+        color: #000;
+    }
+
+    /* Menú móvil */
+    .mobile-menu {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        background-color: #07080a;
+    }
+    .mobile-menu li {
+        margin: 15px 0;
+    }
+
+    /* Imagen */
+    img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        margin-top: 100px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Canvas */
+    canvas {
+        width: 100%;
+        height: 300px;
+        margin-top: 20px;
+        background-color: #e1e7ed;
+        border-radius: 10px;
+    }
+
+    /* Estilos para la sección de logos deslizantes */
+    .logo-slider {
+        overflow: hidden;
+        width: 90%;
+        max-width: 1200px;
+        margin: 20px auto;
+        background-color: #040410;
+        padding: 20px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .logo-container {
+        display: flex;
+        width: 200%;
+        animation: slide 20s linear infinite;
+        align-items: center;
+    }
+
+    .logo-container img {
+        width: 100px;
+        margin: 0 10px;
+        vertical-align: middle;
+    }
+
+    @keyframes slide {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+
+    /* Sección de "Accelerate performance" */
+    .main-section {
+        text-align: center;
+        margin-top: 150px;
+        padding: 20px;
+        max-width: 800px;
+        animation: flicker 1.5s infinite alternate;
+    }
+
+    .main-title {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #ffffff;
+        margin-bottom: 10px;
+    }
+
+    .description {
+        font-size: 1.2em;
+        color: #b0b0b0;
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .logo {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 20px;
+        background: linear-gradient(145deg, #6c63ff, #8f8cff);
+        border-radius: 50%;
+        box-shadow: 0px 0px 15px rgba(140, 130, 255, 0.6);
+    }
+
+    /* Estilos Responsivos */
+    @media (max-width: 768px) {
+        .menu-icon {
+            display: block;
+        }
+        nav ul {
+            display: none;
+        }
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .mobile-menu.open {
+            display: flex;
+        }
+        .main-title {
+            font-size: 2em;
+        }
+        .logo-container img {
+            width: 80px;
+            margin: 0 5px;
+        }
+        .description {
+            font-size: 1em;
+            padding: 0 15px;
+        }
+    }
+
+    /* Estilos para la nueva sección de información */
+    .info-section {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #1a1a1a;
+        border-radius: 10px;
+        max-width: 1200px;
+    }
+    .info-section div {
+        flex: 1;
+        min-width: 300px;
+        margin: 10px;
+        padding: 20px;
+        background-color: #262626;
+        border-radius: 10px;
+        color: #e1e1e1;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .info-section h2 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        color: #ffffff;
+    }
+    .info-section p {
+        font-size: 1em;
+        margin-bottom: 10px;
+        color: #b0b0b0;
+    }
+    .info-section a {
+        color: #1e90ff;
+        text-decoration: none;
+    }
+    .info-section a:hover {
+        text-decoration: underline;
+    }
+     /* Estilo de la barra de advertencia */
+     .warning-bar {
+        display: flex;
+        align-items: center;
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .warning-bar i {
+        margin-right: 10px;
+    }
+
+    .accept-button {
+        margin-left: auto;
+        padding: 5px 10px;
+        background-color: #f1c40f;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .accept-button:hover {
+        background-color: #d4ac0d;
+    }
+
+    /* Estilo de la sección de descarga */
+    #descarga img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+    }
+
+    a.download-link {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        background-color: #5c3a3a;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    a.download-link:hover {
+        background-color: #934451;
+    }
+    .contenido {
+        width: 90%; /* Ancho adaptable */
+        max-width: 800px; /* Ancho máximo en pantallas grandes */
+        padding: 20px;
+        background-color: rgb(3, 2, 2);
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 20px auto; /* Márgenes en dispositivos pequeños y centrar el contenedor */
+    }
+
+    /* Ajustes para pantallas pequeñas (teléfonos) */
+    @media (max-width: 600px) {
+        .contenido {
+            padding: 15px; /* Reduce el padding en teléfonos */
+            margin: 10px auto;  /* Menos margen alrededor */
+        }
+    }
+</style>
+</head>
+<script src="//code.tidio.co/e7e6j5pdbz14bevpfihfj1bgh3qcn8ll.js" async></script>
+<body>
+<header>
+    <span class="menu-icon" onclick="toggleMenu()">☰</span>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="nueva_tarjeta.html">Regresar</a></li>
+            <li><a href="#Marco Teórico">Marco Teórico</a></li>
+            <li><a href="#Metodología">Metodología</a></li>
+            <li><a href="#Procedimiento">Procedimiento</a></li>
+            <li><a href="#Precauciones o riesgos de la práctica">Precauciones o riesgos de la práctica</a></li>
+        </ul>
+        <ul class="mobile-menu">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="nueva_tarjeta.html">Regresar</a></li>
+            <li><a href="#Marco Teórico">Marco Teórico</a></li>
+            <li><a href="#Metodología">Metodología</a></li>
+            <li><a href="#Procedimiento">Procedimiento</a></li>
+            <li><a href="#Precauciones o riesgos de la práctica">Precauciones o riesgos de la práctica</a></li>
+        </ul>
+    </nav>
+  </header>
+  <div class="main-section" data-aos="fade-down" data-aos-duration="900">
+    <!-- Logo de estilo Copilot -->
+    <div class="logo"></div>
+    <h1 class="main-title"> Radar con sensor ultrasónico</h1>
+    <p>Este proyecto tiene como finalidad diseñar y construir un sistema de radar básico utilizando un Arduino y un sensor de ultrasonido HC-SR04. El objetivo es detectar objetos dentro de un rango específico y representar visualmente la información de distancia y posición en una pantalla o monitor. A través de la implementación de estos componentes, se busca incentivar el uso de la tecnología Arduino para la creación de sistemas de medición y detección, promoviendo el aprendizaje y la comprensión de circuitos electrónicos simples y programación básica.</p>
+  </div>
+  <div id="Marco Teórico" class="main-section" data-aos="fade-down" data-aos-duration="900">
+    <!-- Logo de estilo Copilot -->
+    <div class="logo"></div>
+    <h1 class="main-title">Marco Teórico</h1>
+  </div>
+  <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+    <div>
+        <h2>Antecedentes</h2>
+        <div>
+            <h2>Identificación de objetos mediante un sensor supersónico: Arduino Object Radar: </h2>
+            <p>Un radar de objetos es un dispositivo (herramienta) que se utiliza para medir la distancia entre un objeto y el dispositivo que se utiliza con fines topográficos, para determinar el enfoque en fotografías o para obtener información sobre la ubicación y el ángulo del objeto. En este proyecto técnico, hemos creado un radar de objetos simples utilizando el SENSOR ULTRASÓNICO (HC-SR04). Este dispositivo de radar funciona calculando un rango de distancia de 4 cm a 40 cm con un rango de ángulo entre 15° y 165°. En este dispositivo se utiliza un servomotor para la rotación del sensor ultrasónico entre los ángulos. Se utiliza el software "Processing Development Environment" para demostrar el resultado en una pantalla de PC después de procesar la información recibida por el sensor ultrasónico.</p>
+        </div>
+        <div>
+            <h2>Sistema de radar basado en Arduino:</h2>
+            <p>Este artículo describe un sistema de radar controlado mediante Arduino, compuesto por un sensor ultrasónico y un servomotor como componentes principales. El radar detecta objetos dentro de un rango predefinido, girando 180 grados y proporcionando una visualización gráfica a través del software Processing IDE. Este software muestra la posición angular y la distancia del objeto detectado. El Arduino UNO es suficiente para controlar el sensor y manejar la interconexión con el dispositivo de visualización. El sistema es útil en aplicaciones de navegación, detección de obstáculos, mapeo, seguimiento y espionaje, especialmente en entornos interiores debido a su bajo costo.</p>
+        </div>
+        <div>
+            <h2>IMPLEMENTACIÓN DE UN BASTÓN PLEGABLE ELECTRÓNICO CON RADAR POR ULTRASONIDO Y UBICACIÓN MEDIANTE GPS PARA PERSONAS CON DISCAPACIDAD VISUAL:</h2>
+            <p> En Ecuador, la disponibilidad de dispositivos electrónicos portátiles para personas invidentes es escasa. Por esta razón, se implementó un circuito electrónico en un bastón plegable que incluye un radar por ultrasonido y ubicación geográfica mediante GPS. El dispositivo también incluye alertas de voz para ayudar a las personas invidentes a desplazarse de forma segura. Este proyecto representa una gran ayuda para la movilización de personas con discapacidad visual en su día a día. Palabras clave: Personas invidentes, detector de obstáculos, ubicación GPS, bastón plegable, comunicación inalámbrica.</p>
+        </div>
+    </div> 
+    <div>
+        <h2>Bases Teóricas</h2>
+        <ol>
+            <li><p>RADAR: Es un sistema que se usa para detectar la presencia y medir la distancia de objetos. En este caso, en lugar de utilizar ondas de radio, empleamos ondas sonoras.</p></li>
+            <li><p>Sensor de Ultrasonidos: El sensor HC-SR04 emite ondas sonoras para medir distancias, calculando el tiempo que tarda en regresar el sonido al sensor.</p></li>
+            <li><p>Arduino: Es una plataforma de hardware que permite controlar el sensor de ultrasonidos, procesar los datos obtenidos y mostrar los resultados.</p></li>
+            <li><p>Medición de Distancia: Se basa en el tiempo que tarda el sonido en ir y regresar desde un objeto, lo que permite calcular la distancia de forma precisa.</p></li>
+        </ol>
+    </div>
+  </div>
+  <div id="Metodología" class="main-section" data-aos="fade-down" data-aos-duration="900">
+    <!-- Logo de estilo Copilot -->
+    <div class="logo"></div>
+    <h1 class="main-title">Metodología</h1>
+  </div>
+  <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+     <div>
+        <h2>Materiales y equipos</h2>
+        <ol>
+            <li><p>Arduino uno</p></li>
+            <li><p>Placa protoboard</p></li>
+            <li><p>Sensor ultrasonido(HC-SRO4) X 1</p></li>
+            <li><p>Servo motor</p></li>
+            <li><p>Cable de arduino</p></li>
+            <li><p>Cables jumper </p></li>
+        </ol>
+     </div>
+     <div>
+        <h2>Visualizacion de lo materiales en 3D-TINKERCARD</h2>
+     <ol>
+        <li><p>Arduino</p></li>
+        <li><p>Protoboard</p></li>
+        <li><p>Servo motor </p></li>
+        <li><p>Cables jumper </p></li>
+        <li><p>Cable de arduino</p></li>
+     </ol>
+     </div>
+  </div>
+  <div id="Procedimiento" class="main-section" data-aos="fade-down" data-aos-duration="900">
+    <!-- Logo de estilo Copilot -->
+    <div class="logo"></div>
+    <h1 class="main-title">Procedimiento</h1>
+  </div>
+  <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+    <div>
+            <p>Se procede a armar el proyectos mediante las siguientes indicaciones:</p>
+            <img src="imgtarjeta/ultra2.jpg" alt="ultra2">
+            <img src="imgtarjeta/ultra3.jpg" alt="ultra3">
+    </div>
+    <div>
+        <h2>Montaje del circuito:</h2>
+        <div>
+            <h2>Configurar el sensor HC-SR04:</h2>
+            <ol>
+                <li><p>Conectar el pin VCC del sensor al pin 5V del Arduino.</p></li>
+                <li><p>Conectar el pin GND del sensor al pin GND del Arduino. </p></li>
+                <li><p>Conectar el pin TRIG del sensor al pin 9 del Arduino (pin digital).</p></li>
+                <li><p>Conectar el pin ECHO del sensor al pin 10 del Arduino (pin digital).</p></li>
+            </ol>
+        </div>
+        <div>
+          <ol>
+            <h2>Conectar el servomotor:</h2>
+            <li><p>Conectar el pin VCC del servomotor al pin 5V del Arduino. </p></li>
+            <li><p>Conectar el pin GND del servomotor al pin GND del Arduino.</p></li>
+            <li><p>Conectar el pin de control del servomotor al pin 11 del Arduino.</p></li>
+          </ol>
+        </div>
+        <div>
+            <ol>
+                <h2>Montaje final del sistema:</h2>
+                <li><p>Asegurarse de que todas las conexiones sean seguras y que los cables jumper no estén sueltos en la protoboard.</p></li>
+                <li><p>Verificar que el Arduino está conectado a la computadora a través del cable USB para cargar el programa y alimentar el sistema.</p></li>
+            </ol>
+        </div>
+    </div>
+  </div>
+  <div id="Programación del Arduino y Processing" class="main-section" data-aos="fade-down" data-aos-duration="900">
+    <!-- Logo de estilo Copilot -->
+    <div class="logo"></div>
+    <h1 class="main-title">Programación del Arduino y Processing</h1>
+  </div>
+  <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+    <div>
+        <h2>Abrir el IDE de Arduino</h2>
+        <p>Iniciar el software Arduino IDE en tu computadora</p>
+        <div>
+            <h2>Escribir el código para el radar</h2>
+            <p>Copiar el siguiente código en el editor del IDE de Arduino:</p>
+            <a target="_blank" href="https://drive.google.com/file/d/10loKhJ3tWmpeHNNWtuxxcwA4VSgvRhOw/view?usp=sharing">🔗 link directo</a>
+        </div>
+        <div>
+            <h2>Cargar el código en el Arduino</h2>
+            <ol>
+                <li><p>Conectar el Arduino a tu computadora mediante un cable USB.</p></li>
+                <li><p>En el IDE de Arduino, seleccionar el puerto y la placa adecuada (Arduino UNO MINI).</p></li>
+                <li><p>Hacer clic en el botón Subir para cargar el código en el Arduino.</p></li>
+            </ol>
+        </div>
+        <div>
+            <h2>Escribir el código para el radar(Processing)</h2>
+            <p>Copiar el siguiente código en el editor de processing:</p>
+            <a target="_blank" href="https://drive.google.com/file/d/1g4AN381v2SfCI_S-MhWRApOOpBnwsiSJ/view?usp=sharing">🔗 link directo</a>
+        </div>
+    </div>
+    <div>
+        <div>
+        <h2>Mediciones</h2>
+        <ol>
+            <li><p>Colocar diferentes objetos frente al sensor y observar cómo varían las lecturas de distancia y ángulo.</p></li>
+            <li><p>Tomar nota de las distancias medidas a diferentes ángulos.</p></li>
+        </ol>
+        </div>
+        <div>
+            <h2>Interpretar los datos</h2>
+            <ol>
+            <li><p>Analizar cómo el sistema de radar responde a objetos a distintas distancias y cómo cambia el ángulo de detección.</p></li>
+            <li><p>Realizar gráficos para visualizar el comportamiento de la distancia en función del ángulo o la posición de los objetos detectados.</p></li>
+            </ol>
+        </div>
+    </div>
+    <div>
+        <h2>Videos y fotos de las pruebas realizadas</h2>
+        <ol>
+            <li><p><a target="_blank" href="https://drive.google.com/file/d/1HtFt8o-yOflxtzk2AXY_gFp_3QN2ZnME/view?usp=sharing">🔗 link directo</a></p></li>
+            <li><p><a target="_blank" href="https://drive.google.com/file/d/10kox5snW4QTE7Ry5mQt1TL2xtLSyqP3Z/view?usp=sharing">🔗 link directo</a></p></li>
+            <li><p><a target="_blank" href="https://drive.google.com/file/d/1Z-u0xBT779EZ_2qhJ6ywzX-csP_WA1Sf/view?usp=drivesdk">🔗 link directo</a></p></li>
+        </ol>
+    </div>
+  </div>
+  <div id="Precauciones o riesgos de la práctica" class="main-section" data-aos="fade-down" data-aos-duration="900">
+    <!-- Logo de estilo Copilot -->
+    <div class="logo"></div>
+    <h1 class="main-title">Precauciones o riesgos de la práctica</h1>
+  </div>
+  <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+    <div>
+        <h2>Riesgos</h2>
+        <div>
+            <h2>Riesgo Eléctrico:</h2>
+            <ol>
+                <li><p>La manipulación incorrecta de los cables y conexiones puede causar cortocircuitos, lo que podría dañar el Arduino y otros componentes electrónicos.</p></li>
+                <li><p>Uso de fuentes de alimentación inadecuadas que podrían suministrar un voltaje incorrecto al Arduino, causando fallos en el sistema o quemando componentes.</p></li>
+            </ol>
+        </div>
+        <div>
+            <h2>Componentes Defectuosos:</h2>
+            <ol>
+                <li><p>Sensores ultrasónicos defectuosos o de baja calidad pueden dar lecturas incorrectas, afectando la precisión del radar.</p></li>
+                <li><p>Cables o conexiones flojas pueden generar un mal funcionamiento intermitente o fallos de comunicación entre los componentes.</p></li>
+            </ol>
+        </div>
+        <div>
+            <h2>Interferencia Ambiental:</h2>
+            <ol>
+                <li><p>Obstáculos físicos o interferencias en el ambiente pueden afectar la detección del sensor ultrasónico, disminuyendo la precisión del radar.</p></li>
+                <li><p>La humedad o el polvo pueden dañar los sensores ultrasónicos o afectar su funcionamiento.</p></li>
+            </ol>
+        </div>
+        <div>
+            <ol>
+            <h2>Sobrecarga del Circuito:</h2>
+            <li><p>Conectar demasiados dispositivos al Arduino sin considerar la capacidad máxima de corriente que puede manejar puede dañar la placa o los componentes conectados.</p></li>
+           </ol>
+        </div>
+        <div>
+            <h2>Errores de Programación:</h2>
+            <ol>
+                <li><p>Un código mal escrito puede llevar a un mal funcionamiento del sistema, causando lecturas incorrectas o un comportamiento errático del radar.</p></li>
+                <li><p>Bucle infinito o falta de manejo adecuado de errores puede bloquear el sistema.</p></li>
+            </ol>
+        </div>
+    </div>
+    <div>
+        <h2>Precauciones</h2>
+        <div>
+            <h2>Correcta Conexión y Aislamiento:</h2>
+            <ol>
+                <li><p>Asegurarse de que todas las conexiones sean firmes y estén correctamente aisladas para evitar cortocircuitos.</p></li>
+                <li><p>Verificar la polaridad y los voltajes antes de conectar los componentes al Arduino.</p></li>
+            </ol>
+        </div>
+        <div>
+            <ol>
+            <h2>Uso de Componentes de Calidad:</h2>
+            <li><p>Utilizar sensores ultrasónicos de calidad comprobada y revisar su funcionamiento antes de incorporarlos al proyecto.</p></li>
+            <li><p>Realizar pruebas preliminares de los componentes para asegurarte de que funcionan correctamente.</p></li>
+            </ol>
+        </div>
+        <div>
+            <h2>Manejo Adecuado del Entorno:</h2>
+            <ol>
+                <li><p>Colocar el radar en un entorno controlado y libre de obstáculos que puedan interferir con las ondas ultrasónicas.</p></li>
+                <li><p>Asegurar que el entorno esté limpio y seco para evitar daños a los sensores.</p></li>
+            </ol>
+        </div>
+        <div>
+            <h2>Consideración de la Capacidad del Arduino:</h2>
+            <ol>
+                <li><p>Calcular el consumo total de corriente de todos los componentes conectados para asegurarte de que no exceda la capacidad del Arduino.</p></li>
+                <li><p>Considerar el uso de un circuito de protección (como fusibles o diodos) para evitar daños por sobrecarga.</p></li>
+            </ol>
+        </div>
+        <div>
+            <h2>Verificación y Depuración del Código:</h2>
+            <ol>
+                <li><p>Revisar y probar el código de manera exhaustiva para asegurarte de que funciona correctamente y maneja posibles errores.</p></li>
+                <li><p>Implementar mecanismos de depuración y seguimiento para identificar y corregir rápidamente cualquier fallo en el sistema.</p></li>
+            </ol>
+        </div>
+    </div>
+    <div>
+        <h2>Resultados y conclusiones de la práctica</h2>
+        <p>Resultados El proyecto de radar con sensor ultrasónico fue exitoso, logrando detectar objetos en un rango de 4 a 40 cm y un ángulo de 15° a 165°. A través de la programación en Arduino y Processing, se visualizó en tiempo real la posición y distancia de los objetos. Aunque se enfrentaron problemas con el montaje y la programación del código, estos fueron resueltos con ajustes técnicos y pruebas. La precisión de las lecturas fue adecuada, siempre que se mantuviera un entorno controlado para evitar interferencias. Conclusión El proyecto nos permitió integrar componentes electrónicos y aplicar programación de manera práctica, consolidando conocimientos en sensores y servomotores. A pesar de los desafíos técnicos, se cumplieron los objetivos y se destacó la importancia del uso adecuado de los materiales y la precisión en el montaje. La experiencia mejoró tanto las habilidades técnicas como la capacidad para resolver problemas en proyectos electrónicos.</p>
+    </div>
+  </div>
+    <script>
+       // Función para mostrar/ocultar el menú móvil
+        function toggleMenu() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            mobileMenu.classList.toggle('open');
+        }
+    </script>
+</body>
+ <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+</html>

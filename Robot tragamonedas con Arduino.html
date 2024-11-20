@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot tragamonedas con Arduino</title>
+</head>
+<style>
+    /* Estilos Generales */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body, html {
+        font-family: Arial, sans-serif;
+        background-color: #0a0a0a;
+        color: #f2f2f2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        min-height: 100vh;
+        margin: 0;
+    }
+    header {
+        background-color: #000000;
+        color: rgb(243, 240, 240);
+        padding: 1em;
+        text-align: center;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        z-index: 10;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    header h1 {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+    /* Icono de menú hamburguesa */
+    .menu-icon {
+        display: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: white;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
+
+    /* Menú de Navegación */
+    nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+    nav ul li a {
+        color: rgb(223, 211, 211);
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.5em 1em;
+        border-radius: 8px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    nav ul li a:hover {
+        background-color: rgb(235, 226, 226);
+        color: #050a0f;
+    }
+    nav ul li:hover .submenu {
+        display: block;
+    }
+
+    /* Estilos del Submenú */
+    .submenu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #ffffff;
+        color: #000;
+        padding: 10px 0;
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+    }
+    .submenu li {
+        padding: 5px 20px;
+    }
+    .submenu li a {
+        color: #000;
+        font-weight: normal;
+    }
+    .submenu li a:hover {
+        background-color: #f0f0f0;
+        color: #000;
+    }
+
+    /* Menú móvil */
+    .mobile-menu {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        background-color: #07080a;
+    }
+    .mobile-menu li {
+        margin: 15px 0;
+    }
+
+    /* Imagen */
+    img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        margin-top: 100px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Canvas */
+    canvas {
+        width: 100%;
+        height: 300px;
+        margin-top: 20px;
+        background-color: #e1e7ed;
+        border-radius: 10px;
+    }
+
+    /* Estilos para la sección de logos deslizantes */
+    .logo-slider {
+        overflow: hidden;
+        width: 90%;
+        max-width: 1200px;
+        margin: 20px auto;
+        background-color: #040410;
+        padding: 20px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .logo-container {
+        display: flex;
+        width: 200%;
+        animation: slide 20s linear infinite;
+        align-items: center;
+    }
+
+    .logo-container img {
+        width: 100px;
+        margin: 0 10px;
+        vertical-align: middle;
+    }
+
+    @keyframes slide {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+
+    /* Sección de "Accelerate performance" */
+    .main-section {
+        text-align: center;
+        margin-top: 150px;
+        padding: 20px;
+        max-width: 800px;
+        animation: flicker 1.5s infinite alternate;
+    }
+
+    .main-title {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #ffffff;
+        margin-bottom: 10px;
+    }
+
+    .description {
+        font-size: 1.2em;
+        color: #b0b0b0;
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .logo {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 20px;
+        background: linear-gradient(145deg, #6c63ff, #8f8cff);
+        border-radius: 50%;
+        box-shadow: 0px 0px 15px rgba(140, 130, 255, 0.6);
+    }
+
+    /* Estilos Responsivos */
+    @media (max-width: 768px) {
+        .menu-icon {
+            display: block;
+        }
+        nav ul {
+            display: none;
+        }
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .mobile-menu.open {
+            display: flex;
+        }
+        .main-title {
+            font-size: 2em;
+        }
+        .logo-container img {
+            width: 80px;
+            margin: 0 5px;
+        }
+        .description {
+            font-size: 1em;
+            padding: 0 15px;
+        }
+    }
+
+    /* Estilos para la nueva sección de información */
+    .info-section {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #1a1a1a;
+        border-radius: 10px;
+        max-width: 1200px;
+    }
+    .info-section div {
+        flex: 1;
+        min-width: 300px;
+        margin: 10px;
+        padding: 20px;
+        background-color: #262626;
+        border-radius: 10px;
+        color: #e1e1e1;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .info-section h2 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        color: #ffffff;
+    }
+    .info-section p {
+        font-size: 1em;
+        margin-bottom: 10px;
+        color: #b0b0b0;
+    }
+    .info-section a {
+        color: #1e90ff;
+        text-decoration: none;
+    }
+    .info-section a:hover {
+        text-decoration: underline;
+    }
+     /* Estilo de la barra de advertencia */
+     .warning-bar {
+        display: flex;
+        align-items: center;
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .warning-bar i {
+        margin-right: 10px;
+    }
+
+    .accept-button {
+        margin-left: auto;
+        padding: 5px 10px;
+        background-color: #f1c40f;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .accept-button:hover {
+        background-color: #d4ac0d;
+    }
+
+    /* Estilo de la sección de descarga */
+    #descarga img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+    }
+
+    a.download-link {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        background-color: #5c3a3a;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    a.download-link:hover {
+        background-color: #934451;
+    }
+    .contenido {
+        width: 90%; /* Ancho adaptable */
+        max-width: 800px; /* Ancho máximo en pantallas grandes */
+        padding: 20px;
+        background-color: rgb(3, 2, 2);
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 20px auto; /* Márgenes en dispositivos pequeños y centrar el contenedor */
+    }
+
+    /* Ajustes para pantallas pequeñas (teléfonos) */
+    @media (max-width: 600px) {
+        .contenido {
+            padding: 15px; /* Reduce el padding en teléfonos */
+            margin: 10px auto;  /* Menos margen alrededor */
+        }
+    }
+</style>
+     <script src="//code.tidio.co/e7e6j5pdbz14bevpfihfj1bgh3qcn8ll.js" async></script>
+<body>
+    <header>
+        <span class="menu-icon" onclick="toggleMenu()">☰</span>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="nueva_tarjeta.html">Regresar</a></li>
+                <li><a href="#Materiales y Equipos">Materiales y Equipos</a></li>
+                <li><a href="#Procedimiento del prototipo">Procedimiento del prototipo</a></li>
+                <li><a href="#Pruebas">Pruebas</a></li>
+            </ul>
+            <ul class="mobile-menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="nueva_tarjeta.html">Regresar</a></li>
+                <li><a href="#Materiales y Equipos">Materiales y Equipos</a></li>
+                <li><a href="#Procedimiento del prototipo">Procedimiento del prototipo</a></li>
+                <li><a href="#Pruebas">Pruebas</a></li>
+            </ul>
+        </nav>
+      </header>
+      <div class="main-section" data-aos="fade-down" data-aos-duration="900">
+        <!-- Logo de estilo Copilot -->
+        <div class="logo"></div>
+        <h1 class="main-title">Robot tragamonedas con Arduino</h1>
+        <p>El proyecto "Robot Traga Monedas con Arduino" surge como una iniciativa educativa y práctica dentro del programa de Tecnología de Desarrollo de Sistemas de Información y de Software. Este proyecto tiene como objetivo principal diseñar y construir un robot capaz de detectar y almacenar monedas utilizando la plataforma Arduino.El desarrollo del robot combina conceptos fundamentales de robótica, electrónica y programación, proporcionando una experiencia de aprendizaje integral. A través de este proyecto, los integrantes del equipo tienen la oportunidad de aplicar conocimientos teóricos en un contexto práctico, abordando desafíos reales relacionados con la integración de hardware y software. El uso de Arduino, una plataforma de código abierto ampliamente utilizada, permite la flexibilidad y la accesibilidad necesarias para llevar a cabo este tipo de proyectos, facilitando el aprendizaje y la experimentación.Este documento presenta los avances realizados hasta el momento, incluyendo el diseño del sistema, la implementación inicial de los componentes electrónicos, y los primeros resultados obtenidos. Asimismo, se detallan los pasos siguientes para la culminación exitosa del proyecto.
+            </p>
+      </div>
+      <div id="Marco Teórico" class="main-section" data-aos="fade-down" data-aos-duration="900">
+        <!-- Logo de estilo Copilot -->
+        <div class="logo"></div>
+        <h1 class="main-title">Marco Teórico</h1>
+      </div>
+      <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+        <div>
+            <p>El proyecto "Robot tragamonedas con Arduino" combina elementos de robótica, electrónica y programación. Los conceptos clave incluyen:</p>
+            <ol>
+                <li><p>Arduino: Una plataforma de código abierto basada en hardware y software fácil de usar, ideal para proyectos de electrónica.</p></li>
+                <li><p>Sensores: Dispositivos que detectan cambios en el entorno físico, como la presencia de monedas.</p></li>
+                <li><p>Actuadores: Componentes que convierten energía en movimiento, como motores para dispensar premios.</p></li>
+                <li><p>Programación en C++: El lenguaje utilizado para programar la placa Arduino.</p></li>
+                <li><p>Circuitos electrónicos: Diseño y construcción de circuitos para conectar sensores y actuadores al Arduino.</p></li>
+                <li><p>Máquinas de estados: Un modelo de diseño de software útil para controlar el flujo de operaciones en el robot.</p></li>
+            </ol>
+        </div>
+      </div>
+      <div id="Materiales y Equipos" class="main-section" data-aos="fade-down" data-aos-duration="900">
+        <!-- Logo de estilo Copilot -->
+        <div class="logo"></div>
+        <h1 class="main-title">Materiales y Equipos</h1>
+      </div>
+      <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+        <div>
+        <ol>
+            <li><p>(1) Arduino Nano v3</p></li>
+            <li><p>(1) Micro servo TowerPro SG90 o MG90</p></li>
+            <li><p>(1) Sensor Óptico Reflectivo SHARP GP2Y0A21YK0F</p></li>
+            <li><p>(8) Precinto de 10cm de longitud</p></li>
+            <li><p>(6) Trozos de cable con conectores DUPONT Hembra</p></li>
+            <li><p>5cm de Tubo Termo contraíble (1mm de diámetro)</p></li>
+            <li><p>(2) ojos Móviles para muñecos</p></li>
+        </ol>
+        </div>
+        <div>
+            <h2>Diagrama de conexiones</h2>
+            <p>Se hizo prueba con un sitio web llamado tinkercad donde hicimos un diagrama de prueba para después implementarlo físicamente:</p>
+            <img src="img/imgdeproyectos/1.jpg" alt="1">
+        </div>
+        <div>
+            <h2>Codificación con Arduino</h2>
+            <img src="img/imgdeproyectos/2.jpg" alt="2">
+        </div>
+       </div>
+       <div id="Procedimiento del prototipo" class="main-section" data-aos="fade-down" data-aos-duration="900">
+        <!-- Logo de estilo Copilot -->
+        <div class="logo"></div>
+        <h1 class="main-title">Procedimiento del prototipo</h1>
+      </div>
+      <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+        <div>
+            <h2>Preparación de los materiales:</h2>
+            <ol>
+                <li><p>Arduino Uno: Será el cerebro del proyecto.</p></li>
+                <li><p>Protoboard: Para facilitar la conexión de componentes.</p></li>
+                <li><p>Servo motor (TowerPro SG90 o MG90): Se encargará de mover una parte del robot tragamonedas, como la "manivela" o la salida de premios.</p></li>
+                <li><p>Sensor óptico reflectivo SHARP GP2Y0A21YK0F: Detectará la cercanía de un objeto (por ejemplo, una moneda) para activar el sistema.</p></li>
+                <li><p>Cables DUPONT y precintos: Para conectar los componentes entre sí de manera ordenada.</p></li>
+                <li><p>Tubo termocontraíble: Ayudará a proteger las conexiones más delicadas.</p></li>
+            </ol>
+        </div>
+        <div>
+            <h2>Conexión del circuito:</h2>
+            <p>Paso 1: Conexión del sensor óptico al Arduino</p>
+            <ol>
+                <li><p>El sensor SHARP tiene tres pines: VCC, GND y OUT.</p></li>
+                <li><p>Conecta el pin VCC del sensor a 5V en el Arduino</p></li>
+                <li><p>Conecta el pin GND del sensor a GND en el Arduino.</p></li>
+                <li><p>Conecta el pin de señal OUT del sensor al pin 9 del Arduino.</p></li>
+            </ol><br>
+            <p>Paso 2: Conexión del servo motor al Arduino</p>
+            <ol>
+                <li><p>El servo tiene tres cables: VCC, GND, y el de señal.</p></li>
+                <li><p>Conecta el cable VCC del servomotor al 5V del Arduino.</p></li>
+                <li><p>Conecta el cable GND del servo al GND del Arduino.</p></li>
+                <li><p>Conecta el cable de señal del servo motor al pin 2 del Arduino.</p></li>
+            </ol><br>
+            <p>Paso 3: Conexión de la protoboard</p>
+            <ol>
+                <li><p>Usa la protoboard para facilitar las conexiones de los pines GND </p></li>
+                <li><p>y 5V tanto del sensor como del servo motor.</p></li>
+                <li><p>Inserta los cables con conectores DUPONT para facilitar las conexiones a la protoboard.</p></li>
+            </ol>
+        </div>
+        <div>
+           <h2>Código en Arduino</h2> 
+           <p>El código que has escrito ya está preparado para controlar el movimiento del servo motor cuando el sensor detecta un objeto. Asegúrate de haber cargado el código correctamente en tu Arduino:</p>
+           <img src="img/imgdeproyectos/3.jpg" alt="3">
+        </div>
+      </div>
+      <div id="Pruebas" class="main-section" data-aos="fade-down" data-aos-duration="900">
+        <!-- Logo de estilo Copilot -->
+        <div class="logo"></div>
+        <h1 class="main-title">Pruebas</h1>
+      </div>
+      <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+        <div>
+            <ol>
+                <li><p>Paso 1: Cargar el código en el Arduino Uno. Conecta tu Arduino al ordenador y sube el código a la placa.</p></li>
+                <li><p>Paso 2: Probar el sensor óptico. Coloca un objeto cercano al sensor (como una mano o una moneda) y verifica que el valor cambie de LOW a HIGH en el monitor serie.</p></li>
+                <li><p>Paso 3: Verificar el movimiento del servo motor. Asegúrate de que el servomotor gira a 90 grados cuando el sensor detecta un objeto y regresa a 0 grados cuando no lo detecta.</p></li>
+            </ol>
+        </div>
+        <div>
+            <h2>Montaje físico del robot tragamonedas</h2>
+            <ol>
+                <li><p>Diseño del cuerpo del robot: Crea una estructura donde el servo motor mueva una parte visible del tragamonedas (como una manivela o una compuerta de salida de premios).</p></li>
+                <li><p>Montaje del sensor óptico: Coloca el sensor en una posición donde pueda detectar la inserción de una moneda o algún objeto que active el mecanismo.</p></li>
+                <li><p>Fijación de componentes: Usa los precintos y tubos termocontraíbles para mantener los cables en su lugar y evitar desconexiones accidentales.</p></li>
+            </ol>
+        </div>
+      </div>
+      <div id="Resultados de la práctica" class="main-section" data-aos="fade-down" data-aos-duration="900">
+        <!-- Logo de estilo Copilot -->
+        <div class="logo"></div>
+        <h1 class="main-title">Resultados de la práctica</h1>
+      </div>
+      <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+        <div>
+            <h2>Detección de monedas</h2>
+            <p>El sensor óptico reflectivo SHARP GP2Y0A21YK0F, conectado al pin 9 del Arduino, debería ser capaz de detectar la presencia de una moneda u objeto similar cuando se acerque lo suficiente. Esto simulará la inserción de una moneda en una máquina tragamonedas real.</p>
+        </div>
+        <div>
+            <h2>Activación del mecanismo</h2>
+            <p>Una vez que el sensor detecte un objeto (HIGH), el servo motor TowerPro SG90 o MG90 debería girar a una posición de 90 grados. Esto podría representar la activación de la "palanca" de la máquina tragamonedas o la apertura de un compartimento para liberar un premio.</p>
+        </div>
+        <div>
+            <h2>Retroalimentación visual</h2>
+            <p>El monitor serial del Arduino (iniciado a 9600 baudios) debería mostrar el mensaje "Objeto detectado. Servo a 90 grados." cuando se active el mecanismo. Esto nos permitirá verificar que el sistema está funcionando correctamente sin necesidad de observar directamente el hardware.</p>
+        </div>
+        <div>
+            <h2>Retorno a la posición inicial</h2>
+            <p>Si el sensor no detecta ningún objeto (LOW), el servo motor debería volver a su posición inicial de 0 grados. En este caso, el monitor seria mostraría el mensaje "No hay objeto. Servo a 0 grados."</p>
+        </div>
+        <div>
+            <h2>Ciclo de operación</h2>
+            <p>El sistema debería repetir este proceso de detección y activación cada 500 milisegundos (0.5 segundos) debido a la función delay(500) al final del loop. Esto proporcionará un tiempo de respuesta razonable sin sobrecargar el procesador.</p>
+        </div>
+        <div>
+            <h2>Robustez</h2>
+            <p>Se espera que el sistema sea capaz de manejar múltiples "inserciones de monedas" consecutivas sin fallos, demostrando la fiabilidad del código y las conexiones hardware.</p>
+        </div>
+        <div>
+            <h2>Conclusiones de la práctica </h2>
+            <p>Las prácticas realizadas en este proyecto permitieron consolidar habilidades esenciales en electrónica y programación mediante la integración de un sensor óptico y un servo motor controlados por un Arduino. Se trabajó en la correcta conexión de componentes y en la programación de un sistema capaz de responder a entradas del entorno de manera automática. A través de pruebas y ajustes, se comprendió el flujo de información entre sensores y actuadores, así como la importancia de un montaje ordenado para asegurar la estabilidad y funcionalidad del circuito. Estas prácticas son fundamentales para el desarrollo de proyectos de automatización y sirven como base para futuras aplicaciones más complejas.</p>
+        </div>
+      </div>
+      <script>
+        // Función para mostrar/ocultar el menú móvil
+         function toggleMenu() {
+             const mobileMenu = document.querySelector('.mobile-menu');
+             mobileMenu.classList.toggle('open');
+         }
+     </script>
+</body>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+    AOS.init();
+  </script>
+</html>

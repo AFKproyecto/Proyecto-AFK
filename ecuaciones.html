@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ecuaciones</title>
+  <style>
+   body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      background-color: #f8f9fa;
+      width: 250px;
+      height: 100%;
+      border-right: 1px solid #ddd;
+      padding: 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      overflow-y: auto;
+      transform: translateX(-100%); /* Ocultar por defecto */
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.visible {
+      transform: translateX(0); /* Mostrar cuando se active */
+    }
+
+    .sidebar h2 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #007bff;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar ul li {
+      margin-bottom: 15px;
+    }
+
+    .sidebar ul li a {
+      text-decoration: none;
+      color: #333;
+      font-size: 1rem;
+      display: block;
+    }
+
+    .sidebar ul li a:hover {
+      color: #007bff;
+    }
+
+    .has-submenu > .submenu {
+      display: none;
+      margin-left: 15px;
+    }
+
+    .has-submenu.open > .submenu {
+      display: block;
+    }
+
+    .user-section {
+      margin-top: 20px;
+    }
+
+    .user-section button {
+      margin: 5px 0;
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .user-section button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Main Content */
+    .content {
+      margin-left: 250px;
+      padding: 20px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .intro-text {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .intro-text strong {
+      color: #007bff;
+    }
+
+    .link-highlight {
+      color: #0056b3;
+      text-decoration: underline;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .feature-card {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      flex: 1 1 calc(50% - 20px);
+    }
+
+    .feature-card h3 {
+      font-size: 1.3rem;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      font-size: 1rem;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* Responsive Sidebar for Mobile */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        z-index: 1000;
+      }
+
+      .content {
+        margin-left: 0;
+      }
+
+      .menu-toggle {
+        display: block;
+        position: fixed;
+        top: 20px;
+        left: 10px;
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        z-index: 1001;
+        cursor: pointer;
+      }
+
+      .menu-toggle:hover {
+        background-color: #0056b3;
+      }
+    }
+  </style>
+<script src="//code.tidio.co/e7e6j5pdbz14bevpfihfj1bgh3qcn8ll.js" async></script>
+</head>
+<body>
+  <!-- Botón para abrir el menú -->
+  <button class="menu-toggle">☰ Menu</button>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Soluciones para ecuaciones diferenciales</h2>
+    <ul>
+      <li class="has-submenu">
+        <a href="#">🤖 IA para ecuaciones diferenciales</a>
+        <br><ul class="submenu">
+          <li><a target="_blank" href="https://www.mathgptpro.com">Mathos AI</a></li>
+          <li><a target="_blank" href="https://es.symbolab.com">Symbolab</a></li>
+          <li><a target="_blank" href="https://mathdf.com/dif/es/">MathDF</a></li>
+          <li><a target="_blank" href="https://es.snapxam.com/calculators/calculadora-ecuaciones-diferenciales">snapxam</a></li>
+        </ul>
+      </li>
+      <li><a target="_blank" href="https://discord.gg/vuWz3JnxGr">💡 AFK(tutores)</a></li>
+      <li><a href="Herramientas.html">⚙️ herramientas</a></li>
+      <li><a href="quienes_somos.html">👥 Equipo de trabajo</a></li>
+    </ul>
+    <div class="user-section">
+    </div>
+  </div>
+  
+  <!-- Main Content -->
+  <div class="content" data-aos="fade-down" data-aos-duration="900">
+    <h1>Soluciones para ecuaciones diferenciales</h1>
+    <p class="intro-text">
+      Bienvenido al apartado de <strong>Soluciones para ecuaciones diferenciales</strong>, tu compañero ideal para resolver problemas matemáticos. 🚀 Ya sea que enfrentes cálculos básicos o ecuaciones complejas, nuestras herramientas están diseñadas para ayudarte a aprender y dominar cualquier desafío matemático.
+    </p>
+    <p class="intro-text">
+      Explora el apartado de <strong>⚙️ Herramientas</strong> para encontrar la solución perfecta. ¡No olvides visitar a <a target="_blank" href="https://discord.gg/vuWz3JnxGr" class="link-highlight">AFK(tutores)</a> para recibir ayuda personalizada de nuestros expertos! 💡
+    </p>
+    <div class="features">
+      <div class="feature-card">
+        <h3>AFK(tutores)</h3>
+        <p>Tu guía personal para aprender matemáticas con explicaciones paso a paso y lecciones interactivas.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Toggle menú lateral
+    const menuToggle = document.querySelector('.menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('visible'); // Mostrar/ocultar sidebar
+    });
+
+    // Abrir/cerrar submenús
+    document.querySelectorAll('.has-submenu > a').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault(); // Evitar recarga
+        const parent = item.parentElement;
+        parent.classList.toggle('open');
+      });
+    });
+  </script>
+</body>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+</html>

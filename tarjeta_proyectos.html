@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjetas</title>
+    <style>
+        /* Contenedor principal */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #eeeeee;
+            margin: 0;
+        }
+
+        /* Estilos del buscador */
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin: 20px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-container input,
+        .search-container select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .search-container input[type="text"] {
+            flex: 1;
+        }
+
+        /* Estilos de las tarjetas */
+        .card-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Estilos de cada tarjeta */
+        .card {
+            position: relative;
+            width: 200px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .image-container {
+            position: relative;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s;
+        }
+
+        /* Zoom de imagen al hacer hover */
+        .card:hover .image-container img {
+            transform: scale(1.1);
+        }
+
+        /* Información de la tarjeta */
+        .card-info {
+            padding: 20px;
+            text-align: center;
+            background-color: #ffffff;
+        }
+
+        .card-info h3 {
+            font-size: 1.1em;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .card-info p {
+            font-size: 0.9em;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        /* Botones */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .button {
+            padding: 5px 5px;
+            font-size: 0.9em;
+            color: #000000;
+            background-color: #fbfbfb;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #ffffff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-container">
+        <!-- Tarjeta 1 -->
+        <div class="card">
+            <div class="image-container">
+                <img src="imgtarjeta/programacion-2-e1551291144973.jpg" alt="Programacion I">
+                <div class="overlay">I Modulo</div>
+            </div>
+            <div class="card-info">
+                <h3>Programacion I</h3>
+                <div class="button-container">
+                    <a href="temporal de error.html" class="button">Ver más🔍</a>
+                    <a href="programacion1_informacion.html" class="button">Siguiente➡️</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 2 -->
+        <div class="card">
+            <div class="image-container">
+                <img src="imgtarjeta/programacion-2-e1551291144973.jpg" alt="Programacion II">
+                <div class="overlay">II Modulo</div>
+            </div>
+            <div class="card-info">
+                <h3>Programacion II</h3>
+                <div class="button-container">
+                    <a href="temporal de error.html" class="button">Ver más🔍</a>
+                    <a href="programacion2.html" class="button">Siguiente➡️</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 3 -->
+        <div class="card">
+            <div class="image-container">
+                <img src="imgtarjeta/programacion-2-e1551291144973.jpg" alt="Programacion III">
+                <div class="overlay">III Modulo</div>
+            </div>
+            <div class="card-info">
+                <h3>Programacion III</h3>
+                <div class="button-container">
+                    <a href="temporal de error.html" class="button">Ver más🔍</a>
+                    <a href="temporal de error.html" class="button">Siguiente➡️</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 4 -->
+        <div class="card">
+            <div class="image-container">
+                <img src="imgtarjeta/b2ap3_thumbnail_4336.jpg" alt="Proyectos de electrónica">
+                <div class="overlay">Proyectos</div>
+            </div>
+            <div class="card-info">
+                <h3>Proyectos de electrónica</h3>
+                <div class="button-container">
+                    <a href="temporal de error.html" class="button">Ver más🔍</a>
+                    <a href="nueva_tarjeta.html" class="button">Siguiente➡️</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 5 -->
+        <div class="card">
+            <div class="image-container">
+                <img src="imgtarjeta/electronica.png" alt="electronica">
+                <div class="overlay"><I>I modulo</I></div>
+            </div>
+            <div class="card-info">
+                <h3>Electronica del computador</h3>
+                <div class="button-container">
+                    <a href="temporal de error.html" class="button">Ver más🔍</a>
+                    <a href="temporal de error.html" class="button">Siguiente➡️</a>
+                </div>
+            </div>
+        </div>
+        <!-- Tarjeta 6 -->
+        <div class="card">
+            <div class="image-container">
+                <img src="imgtarjeta/Matematica.jpg" alt="Matemáticas I">
+                <div class="overlay">I Modulo</div>
+            </div>
+            <div class="card-info">
+                <h3>Matemáticas I</I></h3>
+                <div class="button-container">
+                    <a href="temporal de error.html" class="button">Ver más🔍</a>
+                    <a href="Matematicas I.html" class="button">Siguiente➡️</a>
+                </div>
+            </div>
+        </div>
+        <!-- Tarjeta 7 -->
+        <div class="card">
+            <div class="image-container">
+                <img src="imgtarjeta/Matematica.jpg" alt="Matemáticas II">
+                <div class="overlay">II Modulo</div>
+            </div>
+            <div class="card-info">
+                <h3>Matemáticas II</h3>
+                <div class="button-container">
+                    <a href="temporal de error.html" class="button">Ver más🔍</a>
+                    <a href="temporal de error.html" class="button">Siguiente➡️</a>
+                </div>
+            </div>
+        </div>
+        <!-- Tarjeta 8 -->
+        <div class="card">
+            <div class="image-container">
+                <img src="imgtarjeta/Matematica.jpg" alt="matemáticas III">
+                <div class="overlay">III Modulo</div>
+            </div>
+            <div class="card-info">
+                <h3>Matemáticas III</h3>
+                <div class="button-container">
+                    <a href="temporal de error.html" class="button">Ver más🔍</a>
+                    <a href="temporal de error.html" class="button">Siguiente➡️</a>
+                </div>
+            </div>
+        </div>
+        <!-- Tarjeta 9 -->
+        <div class="card">
+            <div class="image-container">
+                <img src="imgtarjeta/Matematica.jpg" alt="matemáticas IV">
+                <div class="overlay">IV Modulo</div>
+            </div>
+            <div class="card-info">
+                <h3>Matemáticas IV</h3>
+                <div class="button-container">
+                    <a href="temporal de error.html" class="button">Ver más🔍</a>
+                    <a href="temporal de error.html" class="button">Siguiente➡️</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

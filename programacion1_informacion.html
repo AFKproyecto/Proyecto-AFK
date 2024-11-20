@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programaciónl</title>>
+       <style>
+        /* Estilos Generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            font-family: Arial, sans-serif;
+            background-color: #0a0a0a; /* Fondo oscuro */
+            color: #f2f2f2; /* Texto claro */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+        }
+        header {
+            background-color: #000000; /* Color de fondo de encabezado */
+            color: rgb(243, 240, 240);
+            padding: 1em;
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        /* Icono de menú hamburguesa */
+        .menu-icon {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+
+        /* Menú de Navegación */
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        nav ul li a {
+            color: rgb(223, 211, 211);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5em 1em;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        nav ul li a:hover {
+            background-color: rgb(235, 226, 226);
+            color: #050a0f;
+        }
+        /* Estilos del Submenú */
+        .submenu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #ffffff; /* Fondo del submenú */
+            color: #000; /* Color de texto del submenú */
+            padding: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+        .submenu li {
+            padding: 5px 20px;
+        }
+        .submenu li a {
+            color: #000;
+            font-weight: normal;
+        }
+        .submenu li a:hover {
+            background-color: #f0f0f0;
+            color: #000;
+        }
+        nav ul li:hover .submenu {
+            display: block;
+        }
+
+        /* Menú móvil */
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            background-color: #07080a;
+        }
+        .mobile-menu li {
+            margin: 15px 0;
+        }
+
+        /* Imagen */
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin-top: 100px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Canvas */
+        canvas {
+            width: 100%;
+            height: 300px;
+            margin-top: 20px;
+            background-color: #e1e7ed;
+            border-radius: 10px;
+        }
+
+        /* Estilos para la sección de logos deslizantes */
+        .logo-slider {
+            overflow: hidden;
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #040410;
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            width: 200%;
+            animation: slide 20s linear infinite;
+            align-items: center;
+        }
+
+        .logo-container img {
+            width: 100px;
+            margin: 0 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Sección de "Accelerate performance" */
+        .main-section {
+            text-align: center;
+            margin-top: 150px; /* Ajusta la posición para que no se superponga con el header */
+            padding: 20px;
+            max-width: 800px;
+            animation: flicker 1.5s infinite alternate; /* Animación parpadeo */
+        }
+
+        .main-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            font-size: 1.2em;
+            color: #b0b0b0;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+            background: linear-gradient(145deg, #6c63ff, #8f8cff);
+            border-radius: 50%;
+            box-shadow: 0px 0px 15px rgba(140, 130, 255, 0.6);
+        }
+
+        /* Estilos Responsivos */
+        @media (max-width: 768px) {
+            .menu-icon {
+                display: block;
+            }
+            nav ul {
+                display: none;
+            }
+            .mobile-menu {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                z-index: 10;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            .mobile-menu.open {
+                display: flex;
+            }
+            .main-title {
+                font-size: 2em;
+            }
+            .logo-container img {
+                width: 80px;
+                margin: 0 5px;
+            }
+            .description {
+                font-size: 1em;
+                padding: 0 15px;
+            }
+        }
+
+        /* Estilos para la nueva sección de información */
+        .info-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            max-width: 1200px;
+        }
+        .info-section div {
+            flex: 1;
+            min-width: 300px;
+            margin: 10px;
+            padding: 20px;
+            background-color: #262626;
+            border-radius: 10px;
+            color: #e1e1e1;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .info-section h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        .info-section p {
+            font-size: 1em;
+            margin-bottom: 10px;
+            color: #b0b0b0;
+        }
+        .info-section a {
+            color: #1e90ff;
+            text-decoration: none;
+        }
+        .info-section a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<script src="//code.tidio.co/e7e6j5pdbz14bevpfihfj1bgh3qcn8ll.js" async></script>
+<body>
+    <header>
+        <span class="menu-icon" onclick="toggleMenu()">☰</span>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="#Cursos a la Programación">Cursos a la Programación</a></li>
+                <li><a href="#📄 Documentos y Recursos de Lectura">📄 Documentos y Recursos de Lectura</a></li>
+                <li><a href="#📚 Libros Gratuitos para Aprender Programación">📚 Libros Gratuitos para Aprender Programación</a></li>
+                <li><a href="#🎥 Recursos en Video">🎥 Recursos en Video</a></li>
+                <li><a href="#🖥️ Plataformas Interactivas para Practicar Programación">🖥️ Plataformas Interactivas para Practicar Programación</a></li>
+                <li><a href="#🌐 Documentación y Comunidades de Programación">🌐 Documentación y Comunidades de Programación</a></li>
+                 <li><a href="juego_programacion1.html">🎮 Videojuego</a></li>
+            </ul>
+            <ul class="mobile-menu">
+                <li><a href="Inicio.html">Inicio</a></li>
+                <li><a href="#Cursos y Videos de Introducción a la Programación">Cursos a la Programación</a></li>
+                <li><a href="#📄 Documentos y Recursos de Lectura">📄 Documentos y Recursos de Lectura</a></li>
+                <li><a href="#📚 Libros Gratuitos para Aprender Programación">📚 Libros Gratuitos para Aprender Programación</a></li>
+                <li><a href="#🎥 Recursos en Video">🎥 Recursos en Video</a></li>
+                <li><a href="#🖥️ Plataformas Interactivas para Practicar Programación">🖥️ Plataformas Interactivas para Practicar Programación</a></li>
+                <li><a href="#🌐 Documentación y Comunidades de Programaciónl">🌐 Documentación y Comunidades de Programación</a></li>
+                <li><a href="juego_programacion1.html">🎮 Videojuego</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Secciones de la página con ID -->
+    <div id="Cursos a la Programación" class="main-section"  data-aos="fade-down" data-aos-duration="900">
+        <h1>Cursos a la Programación</h1>
+    </div>
+    <div class="info-section"  data-aos="fade-down" data-aos-duration="900">
+        <div>
+            <h2>Cursos gratuitos, como "Programming for Everybody"</h2>
+            <p>fundamentos de programación en Python. Es excelente para empezar a entender lógica de programación.</p>
+            <a target="_blank"href="https://www.coursera.org/?irgwc=1&utm_medium=partners&utm_source=impact&utm_campaign=2985301&utm_content=b2c&gad_source=1&irclickid=RKwQyKWyYxyKWKAW-ow2s252UkC">🔗 Cursos en Coursera</a>
+        </div>
+        <div class="info-section">
+            <div>
+                <h2> Cursos como "CS50's Introduction to Computer Science" </h2>
+                <p>nseña los conceptos básicos en C y Python. Aunque algunos cursos requieren pago, también puedes auditarlos gratis.</p>
+            <a target="_blank"href="https://www.edx.org/?utm_source=google&utm_campaign=20875889732&utm_medium=cpc&utm_term=edx&gad_source=1&gclid=CjwKCAiAudG5BhAREiwAWMlSjFY1PN5Cla1BoYuSKhg4c3iBvXCGG17sl4osoI5855K8aw71kpZZvRoCX4oQAvD_BwE">🔗 Cursos en Edx</a>
+            </div>
+        </div>
+        <div class="info-section">
+            <div>
+                <h2>Ofrece cursos de programación gratuitos, especialmente en JavaScript, con un enfoque en proyectos interactivos.</h2>
+            <a target="_blank"href="https://es.khanacademy.org/">🔗 Cursos en Khan Academy</a>
+            </div>
+        </div>
+    </div>
+    <div class="logo-slider">
+        <div class="logo-container">
+            <img src="iconos/06bnqFCCqMYNmhahHfpuUFs-13.webp" alt="Logo 1">
+            <img src="iconos/images (4).png" alt="Logo 2">
+            <img src="iconos/MB-Khan-Academy-001-Cover-2000x1126.webp" alt="Logo 3">
+        </div>
+    </div>
+    <div id="📄 Documentos y Recursos de Lectura" class="main-section"  data-aos="fade-down" data-aos-duration="900">
+        <h1>📄 Documentos y Recursos de Lectura</h1>
+    </div>
+    <div class="info-section"  data-aos="fade-down" data-aos-duration="900">
+        <div>
+            <h2>Introducción a la Programación - Python (en español)</h2>
+            <p></p>documentación oficial de Python, ideal para los que empiezan con el lenguaje. Tiene explicaciones detalladas y ejemplos de código.</p>
+        <a target="_blank"href="https://docs.python.org/es/3/tutorial/">📄 Python.org - Tutorial oficial</a>
+        </div>
+        <div>
+            <h2>Fundamentos de Programación en C - (en inglés)</h2>
+            <p>Un sitio interactivo para aprender C, desde lo más básico hasta conceptos más complejos.</p>
+        <atarget="_blank" href="https://www.learn-c.org/">📄 Learn-C.org</a>
+        </div>
+        <div>
+            <h2>Introducción a la Programación en JavaScript (en español)</h2>
+            <p>Documentación oficial de Mozilla con tutoriales y ejemplos para aprender JavaScript</p>
+        <a target="_blank"href="https://developer.mozilla.org/es/docs/Web/JavaScript/Guide">📄 MDN Web Docs - JavaScript</a>
+        </div>
+        <div>
+            <h2>Conceptos Fundamentales de la Programación</h2>
+            <p>Sitio con tutoriales sencillos sobre los conceptos básicos de programación, como variables, estructuras de control y funciones.</p>
+        <a target="_blank"href="https://developer.mozilla.org/es/docs/Web/JavaScript/Guide">📄 Programiz - Conceptos de Programación</a>
+        </div>
+        <div>
+            <h2>Estructuras de Datos y Algoritmos</h2>
+            <p>Un sitio lleno de artículos, ejemplos y ejercicios sobre estructuras de datos y algoritmos. Ideal para reforzar la teoría y práctica.</p>
+        <a target="_blank"href="https://codefinity.com/start/cpp-v2?utm_source=google&utm_medium=cpc&utm_campaign=21743132563&utm_content=168389653872&utm_term=practice%20coding&dki=Practice%20Coding&gad_source=1&gclid=CjwKCAiAudG5BhAREiwAWMlSjKmF0Tgc-wt1A-pTta3ZUJbqnzlO9ZBpWOGSNMSGJ2q3HYM939hJMxoC5TsQAvD_BwE">📄 GeeksforGeeks - Estructuras de Datos</a>
+        </div>
+        <div>
+            <h2>básico para principiantes que introduce conceptos esenciales.</h2>
+            <p>Tiene tutoriales paso a paso en múltiples lenguajes de programación, como HTML, CSS, JavaScript, y Python, explicados de una manera muy accesible.</p>
+        <a target="_blank"href="https://www.w3schools.com/">📄 w3schools.com</a>
+        </div>
+        <div>
+            <h2>guía para aprender JavaScript, HTML y CSS</h2>
+            <p>Mozilla ofrece una excelente guía para aprender JavaScript, HTML y CSS, con explicaciones detalladas y ejemplos prácticos.</p>
+        <a target="_blank"href="https://developer.mozilla.org/en-US/">📄 MDN Web Docs</a>
+        </div>
+    </div>
+    <div class="logo-slider">
+        <div class="logo-container">
+            <img src="iconos/images.png" alt="Logo 1">
+            <img src="iconos/python.jpg" alt="Logo 2">
+            <img src="iconos/images (1).png" alt="Logo 3">
+            <img src="iconos/images (2).png" alt="Logo 4">
+            <img src="iconos/1_lIFdFaQjPYxQfMMCVvZLoA.png" alt="Logo 5">
+            <img src="iconos/images (3).png" alt="Logo 6">
+            <img src="iconos/hq720.jpg" alt="Logo 7">
+        </div>
+    </div>
+    <div id="📚 Libros Gratuitos para Aprender Programación" class="main-section"  data-aos="fade-down" data-aos-duration="900">
+        <h1>📚 Libros Gratuitos para Aprender Programación</h1>
+    </div>
+    <div class="info-section"  data-aos="fade-down" data-aos-duration="900">
+        <div>
+            <h2>"Eloquent JavaScript" (en inglés)</h2>
+            <p>Un libro gratuito en línea que te enseña JavaScript desde los fundamentos hasta los conceptos avanzados. Tiene ejemplos prácticos para cada capítulo.</p>
+            <a target="_blank"href="https://eloquentjavascript.net/">📚 Eloquent JavaScript - Libro Completo</a>
+        </div>
+        <div>
+            <h2>"Python Crash Course" (en inglés)</h2>
+            <p>Un excelente libro para aprender Python de forma práctica, adecuado para principiantes.</p>
+            <a target="_blank"href="https://www.google.com/search?q=Python+Crash+Course+-+GitHub&rlz=1C1VDKB_esCO1028CO1028&oq=Python+Crash+Course+-+GitHub&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIICAEQABgWGB4yCAgCEAAYFhgeMggIAxAAGBYYHjIICAQQABgWGB4yCAgFEAAYFhgeMggIBhAAGBYYHjIICAcQABgWGB4yCAgIEAAYFhgeMgoICRAAGIAEGKIE0gEHMzU1ajBqN6gCALACAA&sourceid=chrome&ie=UTF-8">📚 Python Crash Course - GitHub</a>
+        </div>
+        <div>
+            <h2>"Head First Programming" (en inglés)</h2>
+            <p>Aunque está en inglés, este libro está diseñado para principiantes visuales y hace un excelente trabajo al explicar los conceptos básicos de programación usando Python.</p>
+            <a target="_blank"href="https://www.google.com/search?q=Head+First+Programming+-+O%27Reilly&rlz=1C1VDKB_esCO1028CO1028&oq=Head+First+Programming+-+O%27Reilly&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQIRigAdIBBzQ2MmowajeoAgCwAgA&sourceid=chrome&ie=UTF-8">📚 Head First Programming - O'Reilly</a>
+        </div>
+    </div>
+    <div id="🎥 Recursos en Video" class="main-section"  data-aos="fade-down" data-aos-duration="900">
+        <h1>🎥 Recursos en Video</h1>
+    </div>
+    <div class="info-section"  data-aos="fade-down" data-aos-duration="900">
+        <div>
+            <h2>YouTube - Canal "Programación ATS" (en español)</h2>
+            <p>Canal con tutoriales en español sobre fundamentos de programación y diversos lenguajes.</p>
+            <a target="_blank"href="https://www.youtube.com/c/ProgramacionATS">🎥 Programación ATS</a>
+        </div>
+        <div>
+            <h2>Canal de YouTube "CódigoFacilito" (en español)</h2>
+            <p>Ofrece tutoriales sobre conceptos básicos y avanzados de programación en varios lenguajes.</p>
+            <a target="_blank"href="https://www.youtube.com/c/C%C3%B3digoFacilito">🎥 CódigoFacilito</a>
+        </div>
+        <div>
+            <h2>YouTube - Canal "FreeCodeCamp" (en inglés)</h2>
+            <p>Canal con recursos gratuitos para aprender programación, desde lo más básico hasta temas avanzados.</p>
+            <a target="_blank"href="https://www.youtube.com/c/Freecodecamp">🎥 FreeCodeCamp</a>
+        </div>
+    </div>
+    <div id="🖥️ Plataformas Interactivas para Practicar Programación" class="main-section"  data-aos="fade-down" data-aos-duration="900">
+        <h1>🖥️ Plataformas Interactivas para Practicar Programación</h1>
+    </div>
+    <div class="info-section"  data-aos="fade-down" data-aos-duration="900">
+        <div>
+            <h2>Codecademy</h2>
+            <p>Ofrece cursos interactivos de varios lenguajes de programación, con ejercicios prácticos para cada lección.</p>
+            <a target="_blank"href="https://www.codecademy.com/">🖥️ Codecademy</a>
+        </div>
+        <div>
+            <h2>FreeCodeCamp</h2>
+            <p>Una plataforma gratuita con miles de horas de tutoriales, proyectos y ejercicios para aprender a programa.</p>
+            <a target="_blank"href="https://www.freecodecamp.org/">🖥️ FreeCodeCamp</a>
+        </div>
+        <div>
+            <h2>FreeCodeCamp</h2>
+            <p>Una plataforma gratuita con miles de horas de tutoriales, proyectos y ejercicios para aprender a programar.</p>
+            <a target="_blank"href="https://www.freecodecamp.org/">🖥️ FreeCodeCamp</a>
+        </div>
+        <div>
+            <h2>LeetCode</h2>
+            <p>Ideal para mejorar habilidades de resolución de problemas de programación, desde nivel fácil hasta nivel experto.</p>
+            <a target="_blank"href="https://leetcode.com/">🖥️ LeetCode</a>
+        </div>
+    </div>
+    <div class="logo-slider">
+        <div class="logo-container">
+            <img src="iconos/logo-codecademy-social.webp" alt="Logo 1">
+            <img src="iconos/images (5).png" alt="Logo 2">
+            <img src="iconos/41718343.png" alt="Logo 3">
+        </div>
+    </div>
+    <div id="🌐 Documentación y Comunidades de Programación" class="main-section"  data-aos="fade-down" data-aos-duration="900">
+        <h1>🌐 Documentación y Comunidades de Programación</h1>
+    </div>
+    <div class="info-section"  data-aos="fade-down" data-aos-duration="900">
+        <div>
+            <h2>GitHub - Repositorios y Control de Versiones</h2>
+            <p>Aquí puedes encontrar proyectos de código abierto y ejemplos de código en diversos lenguajes. Además, te ayudará a aprender cómo usar Git y GitHub para control de versiones.</p>
+            <a target="_blank"href="https://github.com/">🌐 GitHub</a>
+        </div>
+        <div>
+            <h2>Stack Overflow - Comunidad de Programadores</h2>
+            <p>Comunidad en línea donde puedes hacer preguntas sobre programación y obtener respuestas de expertos. Es útil para resolver dudas que puedan surgir mientras aprendes.</p>
+            <a target="_blank"href="https://stackoverflow.com/">🌐 Stack Overflow</a>
+        </div>
+        <div>
+            <h2>Reddit - Comunidad r/learnprogramming</h2>
+            <p>Foro donde los principiantes comparten recursos, preguntas y respuestas sobre programación.</p>
+            <a target="_blank"href="Foro donde los principiantes comparten recursos, preguntas y respuestas sobre programación.">🌐 r/learnprogramming</a>
+        </div>
+    </div>
+    <script>
+        // Función para mostrar/ocultar el menú móvil
+        function toggleMenu() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            mobileMenu.classList.toggle('open');
+        }
+    </script>
+</body>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+</html>

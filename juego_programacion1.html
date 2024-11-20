@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego de Memoria</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #ff6347;
+    }
+
+    .game-info {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #333;
+      text-align: center;
+    }
+
+    .game-info span {
+      font-weight: bold;
+      color: #ff6347;
+    }
+
+    #timer {
+      font-size: 1.5em;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      grid-gap: 15px;
+      justify-content: center;
+      width: 90%;
+      max-width: 500px;
+    }
+
+    .card {
+      width: 100%;
+      height: 100px;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 32px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .card.flipped {
+      background-color: #fff;
+      transform: rotateY(180deg);
+    }
+
+    .card.matched {
+      background-color: #4CAF50;
+      color: white;
+      pointer-events: none;
+    }
+
+    .card:hover {
+      background-color: #e0e0e0;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2em;
+      }
+
+      .game-info {
+        font-size: 1em;
+      }
+
+      .card {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Juego de Memoria</h1>
+  <div class="game-info">
+    <p>Intentos: <span id="attempts">0</span></p>
+    <p>Tiempo: <span id="timer">60</span> segundos</p>
+  </div>
+  <div id="board" class="board"></div>
+
+  <script>
+    const emojis = ['🍎', '🍌', '🍊', '🍓', '🍉', '🍇', '🍒', '🍍'];
+    let cards = [...emojis, ...emojis];
+    let flippedCards = [];
+    let matchedCards = 0;
+    let attempts = 0;
+    let timer = 60;
+    let gameTimer;
+    
+    // Barajar las cartas
+    cards = cards.sort(() => Math.random() - 0.5);
+
+    function createBoard() {
+      const board = document.getElementById('board');
+      board.innerHTML = '';
+      cards.forEach((card, index) => {
+        const cardElement = document.createElement('div');
+        cardElement.classList.add('card');
+        cardElement.setAttribute('data-index', index);
+        cardElement.textContent = '?';
+        cardElement.addEventListener('click', flipCard);
+        board.appendChild(cardElement);
+      });
+    }
+
+    function flipCard(event) {
+      const cardElement = event.target;
+      const index = cardElement.getAttribute('data-index');
+      if (flippedCards.length < 2 && !cardElement.classList.contains('flipped') && !cardElement.classList.contains('matched')) {
+        cardElement.textContent = cards[index];
+        cardElement.classList.add('flipped');
+        flippedCards.push({ index, cardElement });
+        
+        if (flippedCards.length === 2) {
+          checkMatch();
+        }
+      }
+    }
+
+    function checkMatch() {
+      const [firstCard, secondCard] = flippedCards;
+      if (cards[firstCard.index] === cards[secondCard.index]) {
+        firstCard.cardElement.classList.add('matched');
+        secondCard.cardElement.classList.add('matched');
+        matchedCards++;
+      } else {
+        setTimeout(() => {
+          firstCard.cardElement.textContent = '?';
+          secondCard.cardElement.textContent = '?';
+          firstCard.cardElement.classList.remove('flipped');
+          secondCard.cardElement.classList.remove('flipped');
+        }, 1000);
+      }
+      
+      attempts++;
+      document.getElementById('attempts').textContent = attempts;
+      flippedCards = [];
+
+      // Verificar si se ha ganado
+      if (matchedCards === cards.length / 2) {
+        clearInterval(gameTimer);
+        alert('¡Has ganado! Felicidades');
+      }
+    }
+
+    function startTimer() {
+      gameTimer = setInterval(() => {
+        if (timer > 0) {
+          timer--;
+          document.getElementById('timer').textContent = timer;
+        } else {
+          clearInterval(gameTimer);
+          alert('¡Tiempo agotado! Has perdido');
+        }
+      }, 1000);
+    }
+
+    createBoard();
+    startTimer();
+  </script>
+
+</body>
+</html>

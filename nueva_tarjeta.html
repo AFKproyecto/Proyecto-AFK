@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjetas</title>
+    <style>
+        /* Contenedor principal */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #000000;
+            margin: 0;
+        }
+
+        /* Estilos del buscador */
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin: 20px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-container input,
+        .search-container select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .search-container input[type="text"] {
+            flex: 1;
+        }
+
+        /* Estilos de las tarjetas */
+        .card-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Estilos de cada tarjeta */
+        .card {
+            position: relative;
+            width: 300px;
+            overflow: hidden;
+            border-radius: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .image-container {
+            position: relative;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s;
+        }
+
+        /* Zoom de imagen al hacer hover */
+        .card:hover .image-container img {
+            transform: scale(1.1);
+        }
+
+        /* Información de la tarjeta */
+        .card-info {
+            padding: 20px;
+            text-align: center;
+            background-color: #ffffff;
+        }
+
+        .card-info h3 {
+            font-size: 1.1em;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .card-info p {
+            font-size: 0.9em;
+            color: #666;
+            margin: 5zpx 0;
+        }
+
+        /* Botones */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .button {
+            padding: 5px 5px;
+            font-size: 0.9em;
+            color: #000000;
+            background-color: #fbfbfb;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #ffffff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <!-- Tarjeta 1 -->
+        <div class="card">
+            <div class="image-container">
+                <img src="imagenes/WhatsApp Image 2024-10-30 at 11.18.22 AM.jpeg" alt="Proyecto de ajuste automático de los alerones de un avión">
+                <div class="overlay">Proyectos</div>
+            </div>
+            <div class="card-info">
+                <h3>Proyecto de ajuste automático de los alerones de un avión</h3>
+                <div class="button-container">
+                    <a href="proyecto_avion.html" class="button">Siguiente➡️</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 2 -->
+        <div class="card">
+            <div class="image-container">
+                <img src="imgtarjeta/foto1.jpeg" alt="foto1">
+                <div class="overlay">Proyectos</div>
+            </div>
+            <div class="card-info">
+                <h3>Lampara sensible al tacto con sensor ultrasonico</h3>
+                <div class="button-container">
+                    <a href="LAMPARA SENSIBLE AL TACTO CON SENSOR ULTRASONICO.html" class="button">Siguiente➡️</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 3 -->
+        <div class="card">
+            <div class="image-container">
+                <img src="imgtarjeta/foto radar.jpg" alt="radar">
+                <div class="overlay">Proyectos</div>
+            </div>
+            <div class="card-info">
+                <h3>Radar con sensor ultrasónico</h3>
+                <div class="button-container">
+                    <a href="Radar con sensor ultrasónico.html" class="button">Siguiente➡️</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 4 -->
+        <div class="card">
+            <div class="image-container">
+                <img src="imgtarjeta/replica.jpg" alt="Proyectos">
+                <div class="overlay">Proyectos</div>
+            </div>
+            <div class="card-info">
+                <h3>Robot tragamonedas con Arduino</h3>
+                <div class="button-container">
+                    <a href="Robot tragamonedas con Arduino.html" class="button">Siguiente➡️</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 5 -->
+        <div class="card">
+            <div class="image-container">
+                <img src="img/imgdeproyectos/10.jpg" alt="10">
+                <div class="overlay">Proyectos</div>
+            </div>
+            <div class="card-info">
+                <h3>Chasis de carro </h3>
+                <p></p>
+                <div class="button-container">
+                    <a href="Chasis de carro .html" class="button">Siguiente➡️</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 6-->
+        <div class="card">
+            <div class="image-container">
+                <img src="img/imgdeproyectos/14.jpg" alt="14">
+                <div class="overlay">Proyectos</div>
+            </div>
+            <div class="card-info">
+                <h3>Coche de arduino antichoques </h3>
+                <div class="button-container">
+                    <a href="coche de arduino antichoques .html" class="button">Siguiente➡️</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

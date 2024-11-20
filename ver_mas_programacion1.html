@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios Institucionales</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4efef;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            text-align: center;
+            max-width: 600px;
+        }
+        h2 {
+            color: #303c6c;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .service {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 50%;
+            color: rgb(255, 253, 253);
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .service i {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        /* Colors for each service */
+        .biblioteca {
+            background-color: #ea5c34;
+        }
+        .lectura {
+            background-color: #3db9b6;
+        }
+        .consultorios {
+            background-color: #d63d7b;
+        }
+        .comunicaciones {
+            background-color: #f1a33e;
+        }
+        .publicaciones {
+            background-color: #4dbb63;
+        }
+        .vida-universitaria {
+            background-color: #f8a130;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Servicios Institucionales</h2>
+        <div class="grid">
+            <div class="service biblioteca">
+                <i>📚</i>
+                <p>Biblioteca Miguel Henríquez Castañeda</p>
+            </div>
+            <div class="service publicaciones">
+                <i>📄</i>
+                <p>Publicaciones</p>
+            </div>
+            <div class="service lectura">
+                <i>📖</i>
+                <p>Centro de Lectura y Escritura</p>
+            </div>
+            <div class="service vida-universitaria">
+                <i>🎭</i>
+                <p>Vida universitaria</p>
+            </div>
+            <div class="service consultorios">
+                <i>⚖️</i>
+                <p>Consultorios Jurídicos y Centros de Conciliación</p>
+            </div>
+            <div class="service comunicaciones">
+                <i>📢</i>
+                <p>Comunicaciones Institucionales</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

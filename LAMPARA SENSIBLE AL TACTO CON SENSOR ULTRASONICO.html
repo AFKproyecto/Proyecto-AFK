@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAMPARA SENSIBLE TACTO</title>
+</head>
+<style>
+    /* Estilos Generales */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body, html {
+        font-family: Arial, sans-serif;
+        background-color: #0a0a0a;
+        color: #f2f2f2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        min-height: 100vh;
+        margin: 0;
+    }
+    header {
+        background-color: #000000;
+        color: rgb(243, 240, 240);
+        padding: 1em;
+        text-align: center;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        z-index: 10;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    header h1 {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+    /* Icono de menú hamburguesa */
+    .menu-icon {
+        display: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: white;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
+
+    /* Menú de Navegación */
+    nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+    nav ul li a {
+        color: rgb(223, 211, 211);
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.5em 1em;
+        border-radius: 8px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    nav ul li a:hover {
+        background-color: rgb(235, 226, 226);
+        color: #050a0f;
+    }
+    nav ul li:hover .submenu {
+        display: block;
+    }
+
+    /* Estilos del Submenú */
+    .submenu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #ffffff;
+        color: #000;
+        padding: 10px 0;
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+    }
+    .submenu li {
+        padding: 5px 20px;
+    }
+    .submenu li a {
+        color: #000;
+        font-weight: normal;
+    }
+    .submenu li a:hover {
+        background-color: #f0f0f0;
+        color: #000;
+    }
+
+    /* Menú móvil */
+    .mobile-menu {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        background-color: #07080a;
+    }
+    .mobile-menu li {
+        margin: 15px 0;
+    }
+
+    /* Imagen */
+    img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        margin-top: 100px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Canvas */
+    canvas {
+        width: 100%;
+        height: 300px;
+        margin-top: 20px;
+        background-color: #e1e7ed;
+        border-radius: 10px;
+    }
+
+    /* Estilos para la sección de logos deslizantes */
+    .logo-slider {
+        overflow: hidden;
+        width: 90%;
+        max-width: 1200px;
+        margin: 20px auto;
+        background-color: #040410;
+        padding: 20px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .logo-container {
+        display: flex;
+        width: 200%;
+        animation: slide 20s linear infinite;
+        align-items: center;
+    }
+
+    .logo-container img {
+        width: 100px;
+        margin: 0 10px;
+        vertical-align: middle;
+    }
+
+    @keyframes slide {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+
+    /* Sección de "Accelerate performance" */
+    .main-section {
+        text-align: center;
+        margin-top: 150px;
+        padding: 20px;
+        max-width: 800px;
+        animation: flicker 1.5s infinite alternate;
+    }
+
+    .main-title {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #ffffff;
+        margin-bottom: 10px;
+    }
+
+    .description {
+        font-size: 1.2em;
+        color: #b0b0b0;
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .logo {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 20px;
+        background: linear-gradient(145deg, #6c63ff, #8f8cff);
+        border-radius: 50%;
+        box-shadow: 0px 0px 15px rgba(140, 130, 255, 0.6);
+    }
+
+    /* Estilos Responsivos */
+    @media (max-width: 768px) {
+        .menu-icon {
+            display: block;
+        }
+        nav ul {
+            display: none;
+        }
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .mobile-menu.open {
+            display: flex;
+        }
+        .main-title {
+            font-size: 2em;
+        }
+        .logo-container img {
+            width: 80px;
+            margin: 0 5px;
+        }
+        .description {
+            font-size: 1em;
+            padding: 0 15px;
+        }
+    }
+
+    /* Estilos para la nueva sección de información */
+    .info-section {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #1a1a1a;
+        border-radius: 10px;
+        max-width: 1200px;
+    }
+    .info-section div {
+        flex: 1;
+        min-width: 300px;
+        margin: 10px;
+        padding: 20px;
+        background-color: #262626;
+        border-radius: 10px;
+        color: #e1e1e1;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .info-section h2 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        color: #ffffff;
+    }
+    .info-section p {
+        font-size: 1em;
+        margin-bottom: 10px;
+        color: #b0b0b0;
+    }
+    .info-section a {
+        color: #1e90ff;
+        text-decoration: none;
+    }
+    .info-section a:hover {
+        text-decoration: underline;
+    }
+     /* Estilo de la barra de advertencia */
+     .warning-bar {
+        display: flex;
+        align-items: center;
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .warning-bar i {
+        margin-right: 10px;
+    }
+
+    .accept-button {
+        margin-left: auto;
+        padding: 5px 10px;
+        background-color: #f1c40f;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .accept-button:hover {
+        background-color: #d4ac0d;
+    }
+
+    /* Estilo de la sección de descarga */
+    #descarga img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+    }
+
+    a.download-link {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        background-color: #5c3a3a;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    a.download-link:hover {
+        background-color: #934451;
+    }
+    .contenido {
+        width: 90%; /* Ancho adaptable */
+        max-width: 800px; /* Ancho máximo en pantallas grandes */
+        padding: 20px;
+        background-color: rgb(3, 2, 2);
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 20px auto; /* Márgenes en dispositivos pequeños y centrar el contenedor */
+    }
+
+    /* Ajustes para pantallas pequeñas (teléfonos) */
+    @media (max-width: 600px) {
+        .contenido {
+            padding: 15px; /* Reduce el padding en teléfonos */
+            margin: 10px auto;  /* Menos margen alrededor */
+        }
+    }
+</style>
+</head>
+<script src="//code.tidio.co/e7e6j5pdbz14bevpfihfj1bgh3qcn8ll.js" async></script>
+<body>
+<header>
+    <span class="menu-icon" onclick="toggleMenu()">☰</span>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="nueva_tarjeta.html">Regresar</a></li>
+            <li><a href="#Marco Teórico">Marco Teórico</a></li>
+            <li><a href="#Metodología">Metodología</a></li>
+            <li><a href="#Procedimiento">Procedimiento</a></li>
+        </ul>
+        <ul class="mobile-menu">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="nueva_tarjeta.html">Regresar</a></li>
+            <li><a href="#Marco Teórico">Marco Teórico</a></li>
+            <li><a href="#Metodología">Metodología</a></li>
+            <li><a href="#Procedimiento">Procedimiento</a></li>
+        </ul>
+    </nav>
+  </header>
+  <div class="main-section" data-aos="fade-down" data-aos-duration="900">
+    <!-- Logo de estilo Copilot -->
+    <div class="logo"></div>
+    <h1 class="main-title">Lampara sensible al tacto con sensor ultrasonico</h1>
+    <p>Este proyecto tiene como finalidad fundamentar y conllevar distintos mecanismos de circuitos simples, mediante la implementación del uso de arduino para la realización de este proyecto, uno de las principales generalidades de este proyecto es conllevar y inculcar el uso de diferentes medios para la realización de circuitos simples, siempre y cuando sea supervisado su proceso.</p>
+  </div>
+  <div id="Marco Teórico" class="main-section" data-aos="fade-down" data-aos-duration="900">
+    <!-- Logo de estilo Copilot -->
+    <div class="logo"></div>
+    <h1 class="main-title">Marco Teórico</h1>
+  </div>
+  <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+    <div>
+        <h2>Que es una lámpara sensible al tacto</h2>
+        <p>La capacidad es una medida que indica la capacidad de una carga eléctrica que un campo eléctrico que un cuerpo puede almacenar la Biblioteca comprueba dos terminales de arduino uno es emisor y otro es receptor mide el tiempo que tarda en alcanzar el mismo estado . Estos terminales se conectaran a un objeto metálico su cuerpo absorberá alguna carga . Haciendo que transcurra mas tiempo para que los dos terminales tengan el mismo estado.</p><br>
+        <ol>
+            <li><p>El uso del arduino para la programación de los sensores es fundamental debido a
+                que facilita su utilidad y conlleva a la finalidad del proyecto</p></li>
+            <li><p>El uso del prothoboard como medio conductor de energía que permite el flujo de corrientes eléctricas para la utilidad de este proyecto</p></li>
+            <li><p>El uso de las resistencias para la estabilización del flujo de corriente eléctrica.</p></li>
+        </ol>
+    </div> 
+  </div>
+  <div id="Metodología" class="main-section" data-aos="fade-down" data-aos-duration="900">
+    <!-- Logo de estilo Copilot -->
+    <div class="logo"></div>
+    <h1 class="main-title">Metodología</h1>
+  </div>
+  <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+     <div>
+        <h2>Materiales y equipos</h2>
+        <ol>
+            <li><p>Arduino uno</p></li>
+            <li><p>Resistencias de 1m ohm y una de 220 ohm</p></li>
+            <li><p>Placa protoboard</p></li>
+            <li><p>Diodo LED</p></li>
+            <li><p>Cables conectores macho</p></li>
+            <li><p>Pequeña lamina de aluminio</p></li>
+            <li><p>Sensor ultrasonico</p></li>
+        </ol>
+     </div>
+     <div>
+        <h2>Visualizacion de lo materiales en 3D-TINKERCARD</h2>
+     <ol>
+        <li><p>Arduino:</p></li>
+        <a target="_blank"href="https://www.tinkercad.com/things/fMR3SWTplP6-spectacular-migelo/editel?s harecode=FZpDW4yy3u5Idf-JxjANt_NEKx7QiIki-1fTVIsTf3U">🔗 link de tinkercad</a><br>
+        <br><li><p>Resistencias:</p></li>
+        <a target="_blank"href="https://www.tinkercad.com/things/fMR3SWTplP6-spectacular-migelo/editel?s harecode=nR8hVFmDG6G6SGb3Oq4vFpbVhT4OfKVwJJQ5ZDnfYrw">🔗 link de tinkercad</a><br>
+        <br><li><p>Protoboard:</p></li>
+        <a target="_blank"href="https://www.tinkercad.com/things/fMR3SWTplP6-spectacular-migelo/editel?s harecode=WioWa3yo4nsrxBl99YMv8pBSJKoJ5t9K4elah3yYzNU">🔗 link de tinkercad</a><br>
+        <br><li><p>Diodo led</p></li>
+        <a target="_blank"href="https://www.tinkercad.com/things/fMR3SWTplP6-spectacular-migelo/editel?s harecode=3wypfvxxDN_p8_xmPH98IY1GkJmZGC4lzrWECAEwwbI">🔗 link de tinkercad</a><br>
+        <br><li><p>PROYECTO Completo</p></li>
+        <a target="_blank"href="https://www.tinkercad.com/things/fMR3SWTplP6-spectacular-migelo/editel?s harecode=VcxmUNRgxPB_XCHjryqlPq7Z6NwQelfYwrYwF3eQH9w">🔗 link de tinkercad</a>
+     </ol>
+     </div>
+  </div>
+  <div id="Procedimiento" class="main-section" data-aos="fade-down" data-aos-duration="900">
+    <!-- Logo de estilo Copilot -->
+    <div class="logo"></div>
+    <h1 class="main-title">Procedimiento</h1>
+  </div>
+  <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+    <div>
+        <ol>
+            <li><p>Se procede a armar el proyectos mediante las siguientes indicaciones:</p></li>
+            <img src="imgtarjeta/WhatsApp Image 2024-11-14 at 7.08.29 PM.jpeg" alt="WhatsApp1">
+            <img src="imgtarjeta/foto2.jpeg" alt="foto2">
+            <li><p>Se procede a programar la placa de arduino para tener a cabo su funcionamiento</p></li>
+            <li><p>Se hace la conexión de los cables, las resistencias y el diodo LED</p></li>
+            <li><p>Luego de que ya todo este conectado se conecta la placa arduino a una corriente eléctrica para ver si su proceso o su funcionamiento es efectivo</p></li>
+            <li><p>Se adjuntara foto del proyecto en funcionalidad:</p></li>
+            <img src="imgtarjeta/foto3.jpeg" alt="foto3">
+            <img src="imgtarjeta/foto4.jpeg" alt="foto4">
+        </ol>
+    </div>
+    <div>
+        <h2>Precauciones o riesgos de la práctica</h2>
+        <p>Este proyecto tiene un indice de riesgos muy bajos, basicamente el riesgo mas alto es al momento de la conexión de los componentes a la protoboard, debido que pueden quemarse o hacer corto.</p>
+    </div>
+    <div>
+        <h2>Resultados y conclusiones de la práctica</h2>
+        <p>Como conclusiones para este proyecto cabe recalcar que su función de lamapara sensible al tacto fue un éxito, también se puede evidenciar que durante la practica de este proyecto, se pudo ver una dificultad, la cual fue el montaje del código debido a los parámetros a indicar. Como ya adjunte la foto del proyecto en funcionamiento, adjuntare otro pero mas presentable:</p>
+        <img src="imgtarjeta/foto5.peg.jpeg" alt="foto5">
+        <img src="imgtarjeta/foto6.jpeg" alt="foto6">
+        <img src="imgtarjeta/imagen7.jpg" alt="imagen7">
+    </div>
+  </div>
+</div>
+    <script>
+       // Función para mostrar/ocultar el menú móvil
+        function toggleMenu() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            mobileMenu.classList.toggle('open');
+        }
+    </script>
+</body>
+ <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+</html>

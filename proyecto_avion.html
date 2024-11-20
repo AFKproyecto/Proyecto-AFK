@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto de Avión</title>
+    <style>
+        /* Estilos Generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            font-family: Arial, sans-serif;
+            background-color: #0a0a0a;
+            color: #f2f2f2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+        }
+        header {
+            background-color: #000000;
+            color: rgb(243, 240, 240);
+            padding: 1em;
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        /* Icono de menú hamburguesa */
+        .menu-icon {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+
+        /* Menú de Navegación */
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        nav ul li a {
+            color: rgb(223, 211, 211);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5em 1em;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        nav ul li a:hover {
+            background-color: rgb(235, 226, 226);
+            color: #050a0f;
+        }
+        nav ul li:hover .submenu {
+            display: block;
+        }
+
+        /* Estilos del Submenú */
+        .submenu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #ffffff;
+            color: #000;
+            padding: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+        .submenu li {
+            padding: 5px 20px;
+        }
+        .submenu li a {
+            color: #000;
+            font-weight: normal;
+        }
+        .submenu li a:hover {
+            background-color: #f0f0f0;
+            color: #000;
+        }
+
+        /* Menú móvil */
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            background-color: #07080a;
+        }
+        .mobile-menu li {
+            margin: 15px 0;
+        }
+
+        /* Imagen */
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin-top: 100px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Canvas */
+        canvas {
+            width: 100%;
+            height: 300px;
+            margin-top: 20px;
+            background-color: #e1e7ed;
+            border-radius: 10px;
+        }
+
+        /* Estilos para la sección de logos deslizantes */
+        .logo-slider {
+            overflow: hidden;
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #040410;
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            width: 200%;
+            animation: slide 20s linear infinite;
+            align-items: center;
+        }
+
+        .logo-container img {
+            width: 100px;
+            margin: 0 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Sección de "Accelerate performance" */
+        .main-section {
+            text-align: center;
+            margin-top: 150px;
+            padding: 20px;
+            max-width: 800px;
+            animation: flicker 1.5s infinite alternate;
+        }
+
+        .main-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            font-size: 1.2em;
+            color: #b0b0b0;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+            background: linear-gradient(145deg, #6c63ff, #8f8cff);
+            border-radius: 50%;
+            box-shadow: 0px 0px 15px rgba(140, 130, 255, 0.6);
+        }
+
+        /* Estilos Responsivos */
+        @media (max-width: 768px) {
+            .menu-icon {
+                display: block;
+            }
+            nav ul {
+                display: none;
+            }
+            .mobile-menu {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                z-index: 10;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            .mobile-menu.open {
+                display: flex;
+            }
+            .main-title {
+                font-size: 2em;
+            }
+            .logo-container img {
+                width: 80px;
+                margin: 0 5px;
+            }
+            .description {
+                font-size: 1em;
+                padding: 0 15px;
+            }
+        }
+
+        /* Estilos para la nueva sección de información */
+        .info-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            max-width: 1200px;
+        }
+        .info-section div {
+            flex: 1;
+            min-width: 300px;
+            margin: 10px;
+            padding: 20px;
+            background-color: #262626;
+            border-radius: 10px;
+            color: #e1e1e1;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .info-section h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        .info-section p {
+            font-size: 1em;
+            margin-bottom: 10px;
+            color: #b0b0b0;
+        }
+        .info-section a {
+            color: #1e90ff;
+            text-decoration: none;
+        }
+        .info-section a:hover {
+            text-decoration: underline;
+        }
+         /* Estilo de la barra de advertencia */
+         .warning-bar {
+            display: flex;
+            align-items: center;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .warning-bar i {
+            margin-right: 10px;
+        }
+
+        .accept-button {
+            margin-left: auto;
+            padding: 5px 10px;
+            background-color: #f1c40f;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .accept-button:hover {
+            background-color: #d4ac0d;
+        }
+
+        /* Estilo de la sección de descarga */
+        #descarga img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        a.download-link {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            background-color: #5c3a3a;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        a.download-link:hover {
+            background-color: #934451;
+        }
+        .contenido {
+            width: 90%; /* Ancho adaptable */
+            max-width: 800px; /* Ancho máximo en pantallas grandes */
+            padding: 20px;
+            background-color: rgb(3, 2, 2);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px auto; /* Márgenes en dispositivos pequeños y centrar el contenedor */
+        }
+
+        /* Ajustes para pantallas pequeñas (teléfonos) */
+        @media (max-width: 600px) {
+            .contenido {
+                padding: 15px; /* Reduce el padding en teléfonos */
+                margin: 10px auto;  /* Menos margen alrededor */
+            }
+        }
+    </style>
+</head>
+<script src="//code.tidio.co/e7e6j5pdbz14bevpfihfj1bgh3qcn8ll.js" async></script>
+<body>
+    <header>
+        <span class="menu-icon" onclick="toggleMenu()">☰</span>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="nueva_tarjeta.html">Regresar</a></li>
+                <li><a href="#Marco Teórico">Marco Teórico</a></li>
+                <li><a href="#Codigo">Codigo</a></li>
+                <li><a href="#Funcionamiento">Funcionamiento</a></li>
+                <li><a href="#Simulación">Simulación</a></li>
+                <li><a href="#Fotos">Fotos</a></li>
+                <li><a href="#Descarga">Descarga</a></li>
+
+            </ul>
+            <ul class="mobile-menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="nueva_tarjeta.html">Regresar</a></li>
+                <li><a href="#Marco Teórico">Marco Teórico</a></li>
+                <li><a href="#Codigo">Codigo</a></li>
+                <li><a href="#Funcionamiento">Funcionamiento</a></li>
+                <li><a href="#Simulación">Simulación</a></li>
+                <li><a href="#Fotos">Fotos</a></li>
+                <li><a href="#Descarga">Descarga</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="main-section" data-aos="fade-down" data-aos-duration="900">
+        <!-- Logo de estilo Copilot -->
+        <div class="logo"></div>
+        <h1 class="main-title">Ajuste automático de los alerones de un avión</h1>
+        <p class="description">Lo más importante a destacar de este proyecto es su finalidad: garantizar que opere
+            correctamente aplicando las reglas principales. Además, el uso de Arduino como
+            herramienta para su desarrollo nos impulsa a practicar continuamente, fomentando la
+            creación de diversos proyectos.</p>
+    </div>
+    <div id="Marco Teórico" class="main-section" data-aos="fade-down" data-aos-duration="900">
+        <!-- Logo de estilo Copilot -->
+        <div class="logo"></div>
+        <h1 class="main-title">Marco Teórico</h1>
+        <p class="description">¿Qué son los sensores?</p>
+    </div>
+    <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+      <div>
+            <h2>definición</h2>
+        <p> Según la Real Academia Española, un sensor es un dispositivo que detecta una determinada acción externa, temperatura, presión, etcétera, y la transmite adecuadamente. Este artefacto toma las señales analógicas externas y las convierte en impulsos eléctricos que son capturados por una serie de circuitos, los cuales modifican para realizar cierto tipo de comportamientos. Estos dispositivos reaccionan a los cambios de las condiciones físicas alterando sus propiedades eléctricas. Por lo tanto, la mayoría de estos dispositivos industriales dependen de sistemas electrónicos para capturar, analizar y transmitir información sobre el medio ambiente.
+            Las características principales de los sensores son:
+        </p>
+            <ol>
+                <li>Rango. Es el valor mínimo y máximo de la variable física que el sensor puede percibir o medir</li>
+                <li>Amplitud. Es la diferencia entre los valores máximos y mínimos de entrada.</li>
+                <li>Exactitud. El error en la medición se especifica en términos de precisión. Se define como la diferencia entre el valor medido y el valor real. Se define en términos de % de la escala completa o % de la lectura.</li>
+                <li>Precisión. Se define como la cercanía entre un conjunto de valores y es diferente de la exactitud.</li>
+                <li>Sensibilidad. Es la relación entre el valor de la salida y el valor de la entrada.</li>
+                <li>Alineación. Es la máxima desviación entre los valores medidos de un sensor de la curva ideal.</li>
+                <li>Histéresis. Es la diferencia en la salida cuando la entrada varía de dos maneras, aumentando y disminuyendo.</li>
+                <li>Resolución. Es el cambio mínimo en la entrada que puede ser detectado por el sensor.</li>
+                <li>Reproducibilidad. Se define como la capacidad del sensor de producir la misma salida cuando se aplica la misma entrada.</li>
+                <li>Repetibilidad. Capacidad del sensor de producir la misma salida cada vez que se aplica la misma entrada y todas las condiciones físicas y de medición se mantienen iguales, incluyendo el operador, el instrumento, las condiciones ambientales, etc.</li>
+                <li>Tiempo de respuesta. Se expresa generalmente como el tiempo en que la salida alcanza un cierto porcentaje de su valor final, en respuesta a un cambio de paso de la entrada.</li>
+            </ol>
+      </div>
+       <div>
+        <h2>Sensores de proximidad</h2>
+        <p>
+            Son transductores que detectan objetos o señales que se encuentran cerca del elemento sensor. Existen varios tipos de sensores de proximidad según el principio físico que utilizan, los más comunes son los inductivos, magnéticos, capacitivos, ultrasónicos.
+        </p>         
+       </div>
+       <div>
+        <h2>¿Qué es arduino?</h2>
+        <p>Es una herramienta utilizada en la programación, una placa electrónica de código abierto o hardware libre que se utiliza para las conexiones de microcontroladores y los diferentes sensores que hacen parte de un circuito donde permite escribir, cargar y ejecutar código en la placa, las placas Arduino incluyen entrada y salida digitales y analógicos que permiten la conexión y control de otros dispositivos electrónicos.</p>
+       </div>
+       <div>
+        <h2>Diseño de circuito</h2>
+        <p>El diseño de circuitos electrónicos es una fascinante área de la electrónica que abarca la creación de circuitos tanto analógicos como digitales. Este proceso involucra diversas etapas, desde la especificación inicial hasta la verificación y prueba del diseño final. Aunque puede parecer complejo, con la orientación adecuada es posible lograrlo con éxito. Cada fase, desde la concepción hasta la implementación, es crucial para obtener un resultado funcional y eficiente en la manipulación de señales eléctricas hacia un objetivo específico. Un circuito electrónico incluye componentes como resistencias, condensadores, diodos y transistores conectados por cables, por donde fluye la corriente. Se diseña inicialmente en una placa de pruebas (prototipos) para permitir modificaciones y mejoras por parte del diseñador.</p>
+       </div>
+    </div>
+    <div id="Codigo" class="main-section" data-aos="fade-down" data-aos-duration="900">
+        <!-- Logo de estilo Copilot -->
+        <div class="logo"></div>
+        <h1 class="main-title">Codigo</h1>
+    </div>
+    <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+        <div>
+            <h2>Codigo Arduino Uno</h2>
+            <p><br>#include <Wire.h><br>
+                <br>#include <MPU6050.h>    // Librería para el sensor MPU6050<br>
+                    <br>#include <Servo.h>      // Librería para los servomotores<br>
+                
+                        <br> MPU6050 mpu;<br>
+                
+                        <br>// Pines de los servos (alerones)<br>
+                        <br>Servo servoAileron;<br>
+                        <br>const int servoPin = 9;<br>
+                
+                        <br>// Variables para el control del servo<br>
+                        <br>int lastServoPosition = 90; // Posición inicial del servo<br>
+                        <br>const int movementSpeed = 2; // Velocidad del movimiento continuo (ajusta según sea necesario)<br>
+                
+                        <br>void setup() {
+                            <br>// Configuración del MPU6050
+                            <br> Wire.begin();
+                            <br>Serial.begin(9600);
+                            <br>mpu.initialize();
+                            <br>if (!mpu.testConnection()) {
+                                <br>Serial.println("¡La conexión con el MPU6050 ha fallado!");
+                                <br>while (1);  // Detiene el programa si hay fallo
+                                <br>}
+                
+                                <br>// Configuración del servo
+                                <br>servoAileron.attach(servoPin);
+                                <br>servoAileron.write(lastServoPosition); // Establece la posición inicial del servo
+                                <br>}
+                
+                                <br>void loop() {
+                                    <br> // Leer los datos del giroscopio del MPU6050
+                                    <br>int16_t gx, gy, gz;
+                                    <br> mpu.getRotation(&gx, &gy, &gz);  // Obtiene datos del giroscopio
+                
+                                    <br>// Convertir el valor crudo a grados/segundo
+                                    <br>double input = gx / 131.0;  // Para una sensibilidad de ±250°/s
+                
+                                    <br>// Ajustar la posición del servo basándose en la inclinación
+                                    <br>lastServoPosition += movementSpeed; // Agrega un movimiento constante
+                  
+                                    <br>// Ajuste basado en la inclinación detectada
+                                    <br>if (input > 1) {
+                                        <br>lastServoPosition -= abs(input) * 0.5; // Ajusta hacia la izquierda si está inclinado hacia la derecha
+                                        <br>} else if (input < -1) {
+                                            <br>lastServoPosition += abs(input) * 0.5; // Ajusta hacia la derecha si está inclinado hacia la izquierda
+                                            <br>}
+                
+                                            <br>// Asegurar que esté dentro del rango del servo
+                                            <br>lastServoPosition = constrain(lastServoPosition, 0, 180); 
+                
+                                            <br>// Mover el servo
+                                            <br>servoAileron.write(lastServoPosition); // Mover el servo
+                
+                                            <br>// Imprimir datos para monitoreo
+                                            <br>Serial.print("Inclinación: ");
+                                            <br>Serial.println(input);
+                                            <br>Serial.print("Posición Servo: ");
+                                            <br>Serial.println(lastServoPosition);
+                
+                                            <br>delay(100);  // Pequeña pausa
+                                            <br>}</p>
+        </div>
+    </div>
+    <div id="Funcionamiento" class="main-section" data-aos="fade-down" data-aos-duration="900">
+        <!-- Logo de estilo Copilot -->
+        <div class="logo"></div>
+        <h1 class="main-title">Funcionamiento</h1>
+    </div>
+    <!-- Nueva sección de información -->
+    <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+        <div>
+            <h2>Lenguaje en Arduino</h2>
+            <ol>
+                <li>Inclusion de librerias.</li>
+                <p>• <strong>Wire.h</strong>: Para la comunicación I2C.</p>
+                <p>• <strong>PID_v1.h</strong>: Para el controlador PID.</p>
+                <p>• <strong>Servo.h</strong>: Para controlar el servomotor.</p>
+                <p>• <strong>MPU6050.h</strong>: Para interactuar con el sensor de movimiento MPU6050.</p>
+
+                <li>Inicialización de Variables y Objetos</li>
+                <p>• Se crean objetos para el sensor MPU6050 y el servomotor.</p>
+                <p>• Variables <strong>Setpoint</strong>, <strong>Input</strong> y <strong>Output</strong> para el controlador PID.</p>
+                <p>• Definición de constantes PID <strong>Kp</strong>, <strong>Ki</strong>, <strong>Kd</strong>.</p>
+                <p>• Inicialización del objeto PID.</p>
+
+                <li>Configuración Inicial (setup)</li>
+                <p>• Comunicación I2C con <strong>Wire.begin()</strong>.</p>
+                <p>• Comunicación serie con <strong>Serial.begin(9600)</strong>.</p>
+                <p>• Inicialización del sensor y verificación de conexión.</p>
+                <p>• Configuración del servomotor en el pin 9.</p>
+                <p>• Establecimiento del Setpoint en 0 grados.</p>
+                <p>• Configuración del PID en modo automático.</p>
+
+                <li>Bucle Principal (loop)</li>
+                <p>• Lectura de datos de aceleración del MPU6050.</p>
+                <p>• Cálculo de inclinación en grados.</p>
+                <p>• Cálculo del PID.</p>
+                <p>• Ajuste del servomotor según la salida del PID.</p>
+                <p>• Impresión de valores para depuración.</p>
+                <p>• Retraso de 50 ms.</p>
+            </ol>
+        </div>
+        <div>
+            <h2>Lenguaje de programación C++</h2>
+            <p><strong>Librería PID_v1</strong>: Simplifica la implementación del algoritmo PID.</p>
+            <p><strong>Pines</strong>: Pines del Arduino para leer la posición del alerón y controlar el servomotor.</p>
+            <ol>
+                <li>Parámetros PID</li>
+                <p>• <strong>Setpoint</strong>: Ángulo de referencia para el alerón.</p>
+                <p>• <strong>Input</strong>: Valor del sensor (posición actual del alerón).</p>
+                <p>• <strong>Output</strong>: Señal de control enviada al servomotor.</p>
+                <p>• Valores iniciales para Kp, Ki y Kd.</p>
+
+                <li>Setup</li>
+                <p>• Inicialización del sensor y servomotor.</p>
+                <p>• Modo automático del PID y valor del Setpoint.</p>
+
+                <li>Loop</li>
+                <p>• Lectura de posición del alerón.</p>
+                <p>• Cálculo del PID.</p>
+                <p>• Limitación de la salida del PID.</p>
+                <p>• Escritura de la señal de control al servomotor.</p>
+            </ol>
+        </div>
+    </div>
+    <div id="Simulación" class="main-section" data-aos="fade-down" data-aos-duration="900">
+        <!-- Logo de estilo Copilot -->
+        <div class="logo"></div>
+        <h1 class="main-title">Simulación del Proyecto</h1>
+    </div>
+    <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+       <div>
+        <h2>Simulación del Proyecto</h2>
+        <p>En el presente enlace, puedes realizar la simulación en Wokwi:</p>
+        <a target="_blank"href="https://wokwi.com/projects/412088088398023681">Simulación en wokwi</a>
+      </div>
+        <div>
+            <h2>Otro metodo</h2>
+            <p>En el presente enlace, puedes realizar la simulación en Wokwi:</p>
+           <ol>
+            <li>Abrir un navegador confiable</li>
+            <img src="imagenes/navegadores-web-ejemplos-1280x720.webp" alt="Ejemplos de navegadores web">
+            <li>Copiar el enlace y pegar en el navegador</li>
+            <img src="imagenes/buscador.png" alt="Captura del buscador web">
+            <li>Presionar en el simulador "Start the simulation"</li>
+            <img src="imagenes/Captura de pantalla 2024-10-31 105858.png" alt="Botón Start the simulation">
+           </ol>
+          </div>
+    </div>
+
+    <div id="Fotos" class="main-section" data-aos="fade-down" data-aos-duration="900">
+        <!-- Logo de estilo Copilot -->
+        <div class="logo"></div>
+        <h1 class="main-title">Fotos</h1>
+    </div>
+    <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+        <div>
+            <h2>Fotos del Proyecto</h2>
+            <p>En el presente enlace, puedes ver las fotos del proyecto:</p>
+            <div>
+                <img src="imagenes/WhatsApp Image 2024-10-30 at 9.19.56 PM.jpeg" alt="Descripción de foto 1">
+                <img src="imagenes/WhatsApp Image 2024-10-30 at 9.19.58 PM.jpeg" alt="Descripción de foto 2">
+                <img src="imagenes/WhatsApp Image 2024-10-30 at 11.11.35 AM.jpeg" alt="Descripción de foto 3">
+                <img src="imagenes/WhatsApp Image 2024-10-30 at 11.18.22 AM.jpeg" alt="Descripción de foto 4">
+            </div>
+        </div>
+    </div>
+    <div id="Descarga" class="main-section" data-aos="fade-down" data-aos-duration="900">
+        <!-- Logo de estilo Copilot -->
+        <div class="logo"></div>
+        <h1 class="main-title">Descarga</h1>
+    </div>
+    <div class="contenido" data-aos="fade-down" data-aos-duration="900">
+        <section>
+            <p class="descarga">NOTA: En caso de que quieras descargar el archivo</p>
+            <div id="warning" class="warning-bar">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="warningText"></span>
+                <button id="ArchivoGithub" class="accept-button">Aceptar</button>
+            </div>
+        </section>
+    </div>
+    <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+        <div>
+            <h2>Archivo WinRAR</h2>
+            <p>Haz clic en el botón de abajo para descargar el archivo:</p>
+            <img src="imagenes/winrar.jpg" alt="Descripción de foto 1">
+            <a href="ruta/al/archivo/Informe DE LABORATORIO-2.docx (2) (1).zip" download="Informe DE LABORATORIO-2.docx (2) (1).zip" class="download-link">Descargar archivo</a>
+        </div>
+        <div>
+            <h2>Archivo PDF</h2>
+            <p>Haz clic en el botón de abajo para descargar el archivo:</p>
+            <img src="imagenes/pdf2.jpg" alt="Descripción de foto 1">
+            <a href="ruta/al/archivo/Informe DE LABORATORIO-2.docx (2) (1).pdf" download="Informe DE LABORATORIO-2.docx (2) (1).pdf" class="download-link">Descargar archivo</a>
+        </div>
+        <div>
+            <h2>Archivo Github</h2>
+            <p>Haz clic en el botón de abajo para entrar en el Repositorio:</p>
+            <img src="imagenes/card.jpg" alt="Descripción de foto 1">
+            <a href="https://github.com/isacc5/descargable1.git" class="download-link" target="_blank">Repositorio</a>
+        </div>
+    </div>
+    <script>
+        // Mostrar advertencia con el enlace de la simulación
+        window.onload = function() {
+         document.getElementById('warningText').textContent ='En el caso de que quieras descargar el archivo y salga algun error, te puede ir al link de repositoria de Github';
+        };
+        document.getElementById('descarga').addEventListener('click', function() {
+            window.location.href = 'descarga.html'; // Ruta a la siguiente página
+        });
+        // Función para mostrar/ocultar el menú móvil
+        function toggleMenu() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            mobileMenu.classList.toggle('open');
+        }
+    </script>
+</body>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+</html>

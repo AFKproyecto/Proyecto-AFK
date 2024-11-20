@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafío - Juego Interactivo</title>
+    <style>
+        /* Estilos básicos */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+        }
+        .container {
+            text-align: center;
+            color: #ecf0f1;
+            width: 400px;
+        }
+        #game {
+            background: #34495e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .btn-container, .code-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        button, .draggable {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover, .draggable:hover {
+            background-color: #2980b9;
+        }
+        button.correct {
+            background-color: #27ae60;
+        }
+        button.wrong {
+            background-color: #c0392b;
+        }
+        .next-btn {
+            margin-top: 20px;
+            cursor: pointer;
+            color: #3498db;
+            font-weight: bold;
+        }
+        .next-btn:hover {
+            color: #2980b9;
+        }
+        .code-box {
+            border: 2px dashed #3498db;
+            border-radius: 8px;
+            padding: 10px;
+            min-height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Demuestra tu conocimiento</h1>
+        <div id="game">
+            <div id="question-container">
+                <h2 id="question"></h2>
+                <div id="answer-buttons" class="btn-container"></div>
+                <div id="code-container" class="code-container"></div>
+                <div id="drop-area" class="code-box">Arrastra y suelta el bloque de código aquí</div>
+            </div>
+            <div id="next-btn" class="next-btn" onclick="nextChallenge()">Siguiente</div>
+            <h3 id="score">Puntuación: 0</h3>
+        </div>
+    </div>
+    <script>
+        const challenges = [
+            {
+                type: "question",
+                question: "¿Cuál es la complejidad de tiempo del algoritmo de búsqueda binaria?",
+                answers: [
+                    { text: "O(n)", correct: false },
+                    { text: "O(log n)", correct: true },
+                    { text: "O(n^2)", correct: false },
+                    { text: "O(1)", correct: false }
+                ]
+            },
+            {
+                type: "code",
+                question: "Organiza este código para recorrer una lista en Python.",
+                codeOptions: [
+                    { text: "print(element)", order: 3 },
+                    { text: "for element in lista:", order: 2 },
+                    { text: "lista = [1, 2, 3, 4]", order: 1 }
+                ],
+                correctOrder: ["lista = [1, 2, 3, 4]", "for element in lista:", "print(element)"]
+            },
+            {
+                type: "question",
+                question: "¿Cuál de las siguientes estructuras de datos permite operaciones de inserción y eliminación solo en los extremos?",
+                answers: [
+                    { text: "Lista", correct: false },
+                    { text: "Pila", correct: true },
+                    { text: "Cola", correct: false },
+                    { text: "Árbol", correct: false }
+                ]
+            }
+        ];
+
+        let currentChallengeIndex = 0;
+        let score = 0;
+
+        function startGame() {
+            currentChallengeIndex = 0;
+            score = 0;
+            document.getElementById('score').innerText = `Puntuación: ${score}`;
+            loadChallenge();
+        }
+
+        function loadChallenge() {
+            resetState();
+            const challenge = challenges[currentChallengeIndex];
+            if (challenge.type === "question") {
+                showQuestion(challenge);
+            } else if (challenge.type === "code") {
+                showCodeChallenge(challenge);
+            }
+        }
+
+        function showQuestion(challenge) {
+            const questionElement = document.getElementById('question');
+            questionElement.innerText = challenge.question;
+
+            challenge.answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.innerText = answer.text;
+                button.classList.add('btn');
+                if (answer.correct) {
+                    button.dataset.correct = answer.correct;
+                }
+                button.addEventListener('click', selectAnswer);
+                document.getElementById('answer-buttons').appendChild(button);
+            });
+        }
+
+        function showCodeChallenge(challenge) {
+            const questionElement = document.getElementById('question');
+            questionElement.innerText = challenge.question;
+            const codeContainer = document.getElementById('code-container');
+
+            challenge.codeOptions.forEach(option => {
+                const codeBlock = document.createElement('div');
+                codeBlock.innerText = option.text;
+                codeBlock.classList.add('draggable');
+                codeBlock.setAttribute('draggable', true);
+                codeBlock.dataset.order = option.order;
+                codeBlock.addEventListener('dragstart', dragStart);
+                codeContainer.appendChild(codeBlock);
+            });
+
+            const dropArea = document.getElementById('drop-area');
+            dropArea.addEventListener('dragover', dragOver);
+            dropArea.addEventListener('drop', dropCode);
+        }
+
+        function resetState() {
+            document.getElementById('question').innerText = "";
+            document.getElementById('answer-buttons').innerHTML = "";
+            document.getElementById('code-container').innerHTML = "";
+            document.getElementById('drop-area').innerHTML = "Arrastra y suelta el bloque de código aquí";
+            document.getElementById('next-btn').style.display = 'none';
+        }
+
+        function selectAnswer(e) {
+            const selectedButton = e.target;
+            const correct = selectedButton.dataset.correct === 'true';
+
+            if (correct) {
+                score += 10;
+                document.getElementById('score').innerText = `Puntuación: ${score}`;
+                selectedButton.classList.add('correct');
+            } else {
+                selectedButton.classList.add('wrong');
+            }
+
+            Array.from(document.getElementById('answer-buttons').children).forEach(button => {
+                button.disabled = true;
+                button.classList.add(button.dataset.correct === 'true' ? 'correct' : 'wrong');
+            });
+
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function dragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.innerText);
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+        }
+
+        function dropCode(e) {
+            e.preventDefault();
+            const data = e.dataTransfer.getData('text/plain');
+            const dropArea = document.getElementById('drop-area');
+            dropArea.innerHTML += `<div>${data}</div>`;
+
+            const correctOrder = challenges[currentChallengeIndex].correctOrder;
+            const droppedItems = Array.from(dropArea.children).map(div => div.innerText);
+            if (droppedItems.length === correctOrder.length) {
+                if (JSON.stringify(droppedItems) === JSON.stringify(correctOrder)) {
+                    score += 20;
+                    document.getElementById('score').innerText = `Puntuación: ${score}`;
+                    document.getElementById('next-btn').style.display = 'block';
+                } else {
+                    dropArea.innerHTML = "Incorrecto. Inténtalo de nuevo.";
+                }
+            }
+        }
+
+        function nextChallenge() {
+            currentChallengeIndex++;
+            if (currentChallengeIndex < challenges.length) {
+                loadChallenge();
+            } else {
+                alert(`Juego terminado. Puntuación final: ${score}`);
+                startGame();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', startGame);
+    </script>
+</body>
+</html>

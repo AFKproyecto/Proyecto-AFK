@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=
+    , initial-scale=1.0">
+    <title>Chasis de carro </title>
+</head>
+<style>
+    /* Estilos Generales */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body, html {
+        font-family: Arial, sans-serif;
+        background-color: #0a0a0a;
+        color: #f2f2f2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        min-height: 100vh;
+        margin: 0;
+    }
+    header {
+        background-color: #000000;
+        color: rgb(243, 240, 240);
+        padding: 1em;
+        text-align: center;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        z-index: 10;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    header h1 {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+    /* Icono de menú hamburguesa */
+    .menu-icon {
+        display: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: white;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
+
+    /* Menú de Navegación */
+    nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+    nav ul li a {
+        color: rgb(223, 211, 211);
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.5em 1em;
+        border-radius: 8px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    nav ul li a:hover {
+        background-color: rgb(235, 226, 226);
+        color: #050a0f;
+    }
+    nav ul li:hover .submenu {
+        display: block;
+    }
+
+    /* Estilos del Submenú */
+    .submenu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #ffffff;
+        color: #000;
+        padding: 10px 0;
+        border-radius: 8px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+    }
+    .submenu li {
+        padding: 5px 20px;
+    }
+    .submenu li a {
+        color: #000;
+        font-weight: normal;
+    }
+    .submenu li a:hover {
+        background-color: #f0f0f0;
+        color: #000;
+    }
+
+    /* Menú móvil */
+    .mobile-menu {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        background-color: #07080a;
+    }
+    .mobile-menu li {
+        margin: 15px 0;
+    }
+
+    /* Imagen */
+    img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        margin-top: 100px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Canvas */
+    canvas {
+        width: 100%;
+        height: 300px;
+        margin-top: 20px;
+        background-color: #e1e7ed;
+        border-radius: 10px;
+    }
+
+    /* Estilos para la sección de logos deslizantes */
+    .logo-slider {
+        overflow: hidden;
+        width: 90%;
+        max-width: 1200px;
+        margin: 20px auto;
+        background-color: #040410;
+        padding: 20px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .logo-container {
+        display: flex;
+        width: 200%;
+        animation: slide 20s linear infinite;
+        align-items: center;
+    }
+
+    .logo-container img {
+        width: 100px;
+        margin: 0 10px;
+        vertical-align: middle;
+    }
+
+    @keyframes slide {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+
+    /* Sección de "Accelerate performance" */
+    .main-section {
+        text-align: center;
+        margin-top: 150px;
+        padding: 20px;
+        max-width: 800px;
+        animation: flicker 1.5s infinite alternate;
+    }
+
+    .main-title {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #ffffff;
+        margin-bottom: 10px;
+    }
+
+    .description {
+        font-size: 1.2em;
+        color: #b0b0b0;
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .logo {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 20px;
+        background: linear-gradient(145deg, #6c63ff, #8f8cff);
+        border-radius: 50%;
+        box-shadow: 0px 0px 15px rgba(140, 130, 255, 0.6);
+    }
+
+    /* Estilos Responsivos */
+    @media (max-width: 768px) {
+        .menu-icon {
+            display: block;
+        }
+        nav ul {
+            display: none;
+        }
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .mobile-menu.open {
+            display: flex;
+        }
+        .main-title {
+            font-size: 2em;
+        }
+        .logo-container img {
+            width: 80px;
+            margin: 0 5px;
+        }
+        .description {
+            font-size: 1em;
+            padding: 0 15px;
+        }
+    }
+
+    /* Estilos para la nueva sección de información */
+    .info-section {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #1a1a1a;
+        border-radius: 10px;
+        max-width: 1200px;
+    }
+    .info-section div {
+        flex: 1;
+        min-width: 300px;
+        margin: 10px;
+        padding: 20px;
+        background-color: #262626;
+        border-radius: 10px;
+        color: #e1e1e1;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .info-section h2 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        color: #ffffff;
+    }
+    .info-section p {
+        font-size: 1em;
+        margin-bottom: 10px;
+        color: #b0b0b0;
+    }
+    .info-section a {
+        color: #1e90ff;
+        text-decoration: none;
+    }
+    .info-section a:hover {
+        text-decoration: underline;
+    }
+     /* Estilo de la barra de advertencia */
+     .warning-bar {
+        display: flex;
+        align-items: center;
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .warning-bar i {
+        margin-right: 10px;
+    }
+
+    .accept-button {
+        margin-left: auto;
+        padding: 5px 10px;
+        background-color: #f1c40f;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .accept-button:hover {
+        background-color: #d4ac0d;
+    }
+
+    /* Estilo de la sección de descarga */
+    #descarga img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+    }
+
+    a.download-link {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        background-color: #5c3a3a;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    a.download-link:hover {
+        background-color: #934451;
+    }
+    .contenido {
+        width: 90%; /* Ancho adaptable */
+        max-width: 800px; /* Ancho máximo en pantallas grandes */
+        padding: 20px;
+        background-color: rgb(3, 2, 2);
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 20px auto; /* Márgenes en dispositivos pequeños y centrar el contenedor */
+    }
+
+    /* Ajustes para pantallas pequeñas (teléfonos) */
+    @media (max-width: 600px) {
+        .contenido {
+            padding: 15px; /* Reduce el padding en teléfonos */
+            margin: 10px auto;  /* Menos margen alrededor */
+        }
+    }
+</style>
+<script src="//code.tidio.co/e7e6j5pdbz14bevpfihfj1bgh3qcn8ll.js" async></script>
+<body>
+    <header>
+        <span class="menu-icon" onclick="toggleMenu()">☰</span>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="nueva_tarjeta.html">Regresar</a></li>
+                <li><a href="#Investigación">Investigación</a></li>
+                <li><a href="#Imagen">Imagen</a></li>
+                <li><a href="#Codigo">Codigo</a></li>
+            </ul>
+            <ul class="mobile-menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="nueva_tarjeta.html">Regresar</a></li>
+                <li><a href="#Investigación">Investigación</a></li>
+                <li><a href="#Imagen">Imagen</a></li>
+                <li><a href="#Codigo">Codigo</a></li>
+            </ul>
+        </nav>
+      </header>
+    <div class="main-section" data-aos="fade-down" data-aos-duration="900">
+    <!-- Logo de estilo Copilot -->
+    <div class="logo"></div>
+    <h1 class="main-title">Chasis de carro </h1>
+    <p>Desarrollar un vehículo autónomo a pequeña escala utilizando Arduino como plataforma principal, incorporando sensores inalámbricos y componentes electrónicos básicos, con el fin de comprender los principios fundamentales de la robótica móvil y la automatización.</p>
+  </div>
+  <div id="Investigación" class="main-section" data-aos="fade-down" data-aos-duration="900">
+    <!-- Logo de estilo Copilot -->
+    <div class="logo"></div>
+    <h1 class="main-title">Investigación</h1>
+  </div>
+  <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+    <div>
+        <h2>Vehículos Autónomos</h2>
+        <p>Un vehículo autónomo es capaz de operar sin intervención humana utilizando diversas tecnologías. Los aspectos clave incluyen:</p>
+        <ol>
+            <li><p>Sensores: Cámaras, radares, lidars y sensores ultrasónicos para percibir el entorno.</p></li>
+            <li><p>Sistemas de navegación: Combinan GPS, sistemas inerciales y mapas preconfigurados.</p></li>
+            <li><p>Inteligencia artificial: Modelos de aprendizaje automático para interpretar datos y tomar decisiones.</p></li>
+            <li><p>Actuadores: Controlan la dirección, aceleración y frenado basándose en las decisiones del sistema.</p></li>
+        </ol>
+    </div>
+    <div>
+        <h2>Arduino</h2>
+        <p>Arduino es una plataforma de hardware y software libre, ideal para prototipos electrónicos.</p><br>
+        <h2>Características principales:</h2>
+        <ol>
+            <li><p>Fácil de usar para principiantes y flexible para usuarios avanzados.</p></li>
+            <li><p>Amplia variedad de placas (Arduino Uno, Nano, Mega, etc.).</p></li>
+            <li><p>Compatibilidad con sensores y actuadores.</p></li>
+        </ol><br>
+        <p>Uso en robótica: Control de motores, integración de sensores y creación de algoritmos para tareas autónomas.</p> 
+    </div>
+    <div>
+        <h2>Sensores</h2>
+        <p>Los sensores son dispositivos que convierten señales físicas o químicas en información procesable. Algunos comunes en robótica:</p>
+        <ol>
+            <li><p>Sensores de proximidad: Detección de objetos cercanos (ultrasónicos, infrarrojos).</p></li>
+            <li><p>Sensores de posición: Codificadores para medir movimientos angulares o lineales</p></li>
+            <li><p>Sensores ambientales: Miden temperatura, presión, humedad, etc.</p></li>
+            <li><p>Cámaras: Usadas para visión por computadora.</p></li>
+            <li><p>IMU (Unidad de Medida Inercial): Integra acelerómetros y giróscopos para estimar orientación y movimiento.</p></li>
+        </ol>
+    </div>
+    <div>
+        <h2>Componentes Electrónicos</h2>
+        <p>Los sistemas robóticos incluyen diversos componentes esenciales:</p>
+        <ol>
+            <li><p>Microcontroladores: Como Arduino o Raspberry Pi, que controlan el sistema.</p></li>
+            <li><p>Motores: Motores DC, servomotores o motores paso a paso para movimiento.</p></li>
+            <li><p>Fuentes de energía: Baterías recargables, reguladores de voltaje.</p></li>
+            <li><p>Actuadores: Elementos como brazos mecánicos, ruedas, etc.</p></li>
+            <li><p>Cables y conectores: Para transmitir señales y energía entre componentes.</p></li>
+        </ol>
+    </div>
+    <div>
+        <h2>Principios Básicos de Robótica Móvil</h2>
+        <ol>
+            <li><p>Cinemática y dinámica: Estudio del movimiento de robots.</p></li>
+            <li><p>Ejemplo: Diferencia entre robots con ruedas omnidireccionales y diferenciales.</p></li>
+            <li><p>Planificación de rutas: Algoritmos como A* o Dijkstra para navegación.></p></li>
+            <li><p>Controladores: PIDs para ajustar movimientos basados en retroalimentación de sensores.</p></li>
+            <li><p>Integración de sistemas: Combinar hardware y software para coordinar sensores, actuadores y controladores.</p></li>
+        </ol>
+    </div>
+  </div>
+  <div id="Imagen" class="main-section" data-aos="fade-down" data-aos-duration="900">
+    <!-- Logo de estilo Copilot -->
+    <div class="logo"></div>
+    <h1 class="main-title">Imagen</h1>
+  </div>
+  <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+    <div>
+        <img src="img/imgdeproyectos/10.jpg" alt="10">
+        <img src="img/imgdeproyectos/11.jpg" alt="11">
+    </div>
+  </div>
+  <div id="Codigo" class="main-section" data-aos="fade-down" data-aos-duration="900">
+    <!-- Logo de estilo Copilot -->
+    <div class="logo"></div>
+    <h1 class="main-title">Codigo</h1>
+  </div>
+  <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+    <div>
+        <img src="img/imgdeproyectos/12.jpg" alt="12">
+        <img src="img/imgdeproyectos/13.jpg" alt="12">
+    </div>
+  </div>
+  <script>
+     // Función para mostrar/ocultar el menú móvil
+     function toggleMenu() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            mobileMenu.classList.toggle('open');
+        }
+  </script>
+</body>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+</html>

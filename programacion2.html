@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programación 2</title>>
+       <style>
+        /* Estilos Generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            font-family: Arial, sans-serif;
+            background-color: #0a0a0a; /* Fondo oscuro */
+            color: #f2f2f2; /* Texto claro */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+        }
+        header {
+            background-color: #000000; /* Color de fondo de encabezado */
+            color: rgb(243, 240, 240);
+            padding: 1em;
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        /* Icono de menú hamburguesa */
+        .menu-icon {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+
+        /* Menú de Navegación */
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        nav ul li a {
+            color: rgb(223, 211, 211);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5em 1em;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        nav ul li a:hover {
+            background-color: rgb(235, 226, 226);
+            color: #050a0f;
+        }
+        /* Estilos del Submenú */
+        .submenu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #ffffff; /* Fondo del submenú */
+            color: #000; /* Color de texto del submenú */
+            padding: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+        .submenu li {
+            padding: 5px 20px;
+        }
+        .submenu li a {
+            color: #000;
+            font-weight: normal;
+        }
+        .submenu li a:hover {
+            background-color: #f0f0f0;
+            color: #000;
+        }
+        nav ul li:hover .submenu {
+            display: block;
+        }
+
+        /* Menú móvil */
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            background-color: #07080a;
+        }
+        .mobile-menu li {
+            margin: 15px 0;
+        }
+
+        /* Imagen */
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin-top: 100px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Canvas */
+        canvas {
+            width: 100%;
+            height: 300px;
+            margin-top: 20px;
+            background-color: #e1e7ed;
+            border-radius: 10px;
+        }
+
+        /* Estilos para la sección de logos deslizantes */
+        .logo-slider {
+            overflow: hidden;
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #040410;
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            width: 200%;
+            animation: slide 20s linear infinite;
+            align-items: center;
+        }
+
+        .logo-container img {
+            width: 100px;
+            margin: 0 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Sección de "Accelerate performance" */
+        .main-section {
+            text-align: center;
+            margin-top: 150px; /* Ajusta la posición para que no se superponga con el header */
+            padding: 20px;
+            max-width: 800px;
+            animation: flicker 1.5s infinite alternate; /* Animación parpadeo */
+        }
+
+        .main-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            font-size: 1.2em;
+            color: #b0b0b0;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+            background: linear-gradient(145deg, #6c63ff, #8f8cff);
+            border-radius: 50%;
+            box-shadow: 0px 0px 15px rgba(140, 130, 255, 0.6);
+        }
+
+        /* Estilos Responsivos */
+        @media (max-width: 768px) {
+            .menu-icon {
+                display: block;
+            }
+            nav ul {
+                display: none;
+            }
+            .mobile-menu {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                z-index: 10;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            .mobile-menu.open {
+                display: flex;
+            }
+            .main-title {
+                font-size: 2em;
+            }
+            .logo-container img {
+                width: 80px;
+                margin: 0 5px;
+            }
+            .description {
+                font-size: 1em;
+                padding: 0 15px;
+            }
+        }
+
+        /* Estilos para la nueva sección de información */
+        .info-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            max-width: 1200px;
+        }
+        .info-section div {
+            flex: 1;
+            min-width: 300px;
+            margin: 10px;
+            padding: 20px;
+            background-color: #262626;
+            border-radius: 10px;
+            color: #e1e1e1;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .info-section h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        .info-section p {
+            font-size: 1em;
+            margin-bottom: 10px;
+            color: #b0b0b0;
+        }
+        .info-section a {
+            color: #1e90ff;
+            text-decoration: none;
+        }
+        .info-section a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<script src="//code.tidio.co/e7e6j5pdbz14bevpfihfj1bgh3qcn8ll.js" async></script>
+<body>
+    <header>
+        <span class="menu-icon" onclick="toggleMenu()">☰</span>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="#"></a></li>
+                <li><a href="#Programación Orientada a Objetos (POO)">Programación Orientada a Objetos (POO)</a></li>
+                <li><a href="#Estructuras de Datos">Estructuras de Datos</a></li>
+                <li><a href="#Algoritmos de Ordenamiento y Búsqueda">Algoritmos de Ordenamiento y Búsqueda</a></li>
+                <li><a href="#NIVEL II">NIVEL II</a></li>
+                <li><a href="juego_ progrmacion2.html">🎮 Videojuego</a></li>
+            </ul>
+            <ul class="mobile-menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="#"></a></li>
+                <li><a href="#Programación Orientada a Objetos (POO)">Programación Orientada a Objetos (POO)</a></li>
+                <li><a href="#Estructuras de Datos">Estructuras de Datos</a></li>
+                <li><a href="#Algoritmos de Ordenamiento y Búsqueda">Algoritmos de Ordenamiento y Búsqueda</a></li>
+                <li><a href="#NIVEL II">NIVEL II</a></li>
+                <li><a href="juego_ progrmacion2.html">🎮 Videojuego</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="main-section" data-aos="fade-down" data-aos-duration="900">
+        <!-- Logo de estilo Copilot -->
+        <div class="logo"></div>
+        <h1 class="main-title">¡Bienvenidos a programacion II! </h1>
+        <p class="description"><br>💡Bienvenidos a la página de Programación II, un espacio dedicado a proporcionar herramientas y recursos para estudiantes que buscan reforzar sus conocimientos en programación avanzada. Encuentra aquí guías, ejercicios y aplicaciones útiles para facilitar tu aprendizaje y práctica. ¡Aprovecha este espacio para llevar tus habilidades de programación al siguiente nivel!  💡</p>
+    </div>
+    <div id="Programación Orientada a Objetos (POO)" class="main-section" data-aos="fade-down" data-aos-duration="900">
+        <h1>Programación Orientada a Objetos (POO)</h1>
+    </div>
+    <div>
+        <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+          <div>
+            <h2>📚 Documentación y Guías de POO</h2>
+            <ol>
+                <li><p>Documentación de Java: Java es uno de los lenguajes más utilizados para aprender POO. La documentación oficial tiene ejemplos y conceptos de clases, herencia y más.</p></li>
+                <a target="_blank"href="https://docs.oracle.com/en/java/">📄 Java Documentation</a><br>
+                <br><li><p>Guía de POO en Python: Python también soporta POO y es más accesible para principiantes.</p></li>
+                <a target="_blank"href="https://docs.python.org/3/tutorial/classes.html">📄 Python Tutorial - Classes</a><br>
+                <br><li><p>Microsoft .NET - C# y POO: Para quienes usan C#, la documentación de Microsoft tiene secciones completas sobre POO.</p></li>
+                <a target="_blank"href="https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/tutorials/oop">📄 Microsoft .NET - C# and OOP"></a>
+            </ol>
+          </div>
+            <div>
+                <h2>🎥 Videos</h2>
+              <ol>
+                <li><p>Conceptos Fundamentales de POO: La lista de reproducción de freeCodeCamp explica los principios de POO en varios lenguajes.</p> </li>
+                    <a target="_blank"href="https://www.youtube.com/c/Freecodecamp">🎥 Conceptos Fundamentales de POO</a><br>
+                <br><li>POO en Python: La serie de Corey Schafer es excelente para entender POO en Python.</li><br>
+                <a href="https://www.youtube.com/c/CoreySchafer">🎥 Corey Schafer - POO en Python</a><br>
+                <br><li>CS50 - Fundamentos de Programación: Curso de Harvard CS50, que cubre POO en varios lenguajes.</li><br>
+                <a target="_blank"href="https://www.youtube.com/c/cs50">🎥 CS50 - Fundamentos de Programación</a><br>
+              <ol>
+            </div>
+            <div>
+                <h2>🖥️ Plataformas Interactivas y Ejercicios</h2>
+                <li><p>KoderHQ: Blog con artículos claros sobre fundamentos de POO.</p></li><br>
+                <br><a target="_blank"href="https://www.koderhq.com">🌐 KoderHQ</a><br>
+                <br><li><p>Programación Orientada a Objetos en Dev.to: La comunidad Dev.to tiene artículos sobre temas como clases, interfaces, polimorfismo, y patrones de diseño.</p></li><br>
+                <a target="_blank"href="https://dev.to">🌐 Programación Orientada a Objetos en Dev.to</a><br>
+            </div>
+            <div>
+                <h2>📚 Libro Digitales y Recursos en PDF </h2>
+                <ol>
+                    <li><p>"Eloquent JavaScript": Tiene capítulos dedicados a POO en JavaScript, ideal para estudiantes de web</p></li>
+                    <a target="_blank"href="https://eloquentjavascript.net">📚 Eloquent JavaScript - Libro Completo</a><br>
+                <br><li>Libro "Programming Principles and Practice Using C++" de Bjarne Stroustrup: Es un recurso excelente para aprender POO en C++.</li>
+            </ol>
+            </div>
+        </div>
+        <div class="logo-slider">
+            <div class="logo-container">
+                <img src="imgprogrmacion2/java-1024x576.png" alt="Logo 1">
+                <img src="imgprogrmacion2/python.jpg" alt="Logo 2">
+                <img src="imgprogrmacion2/microsoft.jpg" alt="Logo 3">
+                <img src="imgprogrmacion2/images (5).png" alt="Logo 4">
+                <img src="imgprogrmacion2/image.png" alt="Logo 5">
+                <img src="imgprogrmacion2/leklhSoR_400x400.jpg" alt="Logo 6">
+                <img src="imgprogrmacion2/lP86GTfP_400x400.jpg" alt="Logo 7">
+                <img src="imgprogrmacion2/https___dev-to-uploads.s3.amazonaws.com_uploads_organization_profile_image_1_d908a186-5651-4a5a-9f76-15200bc6801f.jpg" alt="Logo 8">
+                <img src="imgprogrmacion2/images (1).png" alt="Logo 8">
+                <img src="imgprogrmacion2/Entrada-y-Salida-de-Datos-header.png" alt="Logo 9">
+                <img src="imgprogrmacion2/apache-netbeans-1.jpg" alt="Logo 10">
+            </div>
+        </div>
+        <div id="Estructuras de Datos" class="main-section" data-aos="fade-down" data-aos-duration="900">
+            <h1>Estructuras de Datos</h1>
+        </div>
+        <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+            <div>
+                <h2>🌐 Cursos y Tutoriales Completos</h2>
+                <ol>
+                    <li><p>Curso de Estructuras de Datos de Udacity (en inglés): Este curso cubre los fundamentos de estructuras de datos en Python, pero los conceptos se aplican a otros lenguajes.</p></li>
+                    <a target="_blank"href="https://www.udacity.com/?promo=oct&coupon=BOOST40&utm_source=gsem_brand&utm_medium=ads_r&utm_campaign=12908420060_c_individuals&utm_term=122017860695&utm_keyword=udacity_e&utm_source=gsem_brand&utm_medium=ads_r&utm_campaign=12908420060_c_individuals&utm_term=122017860695&utm_keyword=udacity_e&gad_source=1&gclid=CjwKCAiA3Na5BhAZEiwAzrfagCosqaZVeu1-TyFGNUu-vkTIXi_mVkUOQ9BRpBWuG4V4QEXsm0HhdhoC9yQQAvD_BwE">🌐 Udacity</a><br>
+                    <br><li><p>MIT OpenCourseWare: Introduction to Algorithms: Curso completo del MIT sobre algoritmos y estructuras de datos, con videos y notas.</p></li>
+                    <a target="_blank"href="https://ocw.mit.edu">🌐 MIT OpenCourseWare</a><br>
+                    <br><li><p>Curso de Data Structures en Coursera por la Universidad de California: Curso introductorio con práctica interactiva.</p></li>
+                    <a target="_blank"href="https://www.coursera.org">🌐 Coursera</a>
+            </div>
+            <div>
+                <h2>🌐 Guías y Artículos</h2>
+                <ol>
+                    <li><p>GeeksforGeeks - Guía Completa de Estructuras de Datos: Incluye guías detalladas y ejemplos de implementación de todas las estructuras de datos básicas y avanzadas.</p></li>
+                    <a target="_blank"href="https://www.geeksforgeeks.org">🌐 GeeksforGeeks</a><br>
+                    <br><li><p>Tutorial de Data Structures en Programiz: Explicaciones simples y ejemplos de listas enlazadas, pilas, colas, árboles y más.</p></li>
+                    <a target="_blank"href="https://www.programiz.com/dsa">🌐 Programiz</a><br>
+                    <br><li><p>JavaTpoint - Estructuras de Datos: Explicaciones sobre estructuras de datos en Java y otros lenguajes. Incluye pseudocódigo y diagramas.</p></li>
+                    <a target="_blank"href="https://www.javatpoint.com/data-structure">🌐 Java</a>
+
+                </ol>
+            </div>
+            <div>
+                <h2>📚 Libros Gratuitos y Documentación</h2>
+                <ol>
+                    <li><p>The Algorithm Design Manual de Steven S. Skiena: Un libro de referencia que contiene teoría de estructuras de datos y algoritmos con problemas prácticos. Puedes buscar versiones gratuitas en bibliotecas digitales.</p></li>
+                    <li><p>"Problem Solving with Algorithms and Data Structures using Python" de Brad Miller y David Ranum: Disponible en formato web y cubre estructuras de datos con Python.</p></li>
+                </ol>
+            </div>
+            <div>
+                <h2>📍 Recursos Interactivos y Visualización de Estructuras de Datos</h2>
+                <ol>
+                    <li>VisuAlgo: Plataforma interactiva donde puedes visualizar estructuras de datos y cómo se comportan los algoritmos de manera gráfica.</li>
+                    <br><a target="_blank"href="https://visualgo.net/en">🌐 VisuAlgo</a>
+                    <li>Data Structure Visualizations: Este sitio web permite ver animaciones de estructuras de datos como listas enlazadas, pilas, colas, árboles y más.</li>
+                    <br><a target="_blank"href="https://visualgo.net/en">🌐 Data Structure Visualizations</a>
+                </ol>
+            </div>
+            <div>
+                <h2>🎯 Ejercicios y Prácticas</h2>
+                <ol>
+                    <li>HackerRank - Data Structures: Ejercicios prácticos de estructuras de datos para mejorar habilidades en lenguajes como Python, Java y C++</li>
+                    <br><a target="_blank"href="https://www.hackerrank.com">🌐 HackerRank</a><br>
+                    <li>LeetCode - Data Structures Tag: Ejercicios de diferentes niveles que cubren todos los tipos de estructuras de datos.</li>
+                    <br><a target="_blank"href="https://leetcode.com">🌐 LeetCode</a>
+                </ol>
+            </div>
+        </div>
+        <div class="logo-slider">
+            <div class="logo-container">
+                <img src="imgprogrmacion2/06bnqFCCqMYNmhahHfpuUFs-13.webp" alt="Logo 1">
+                <img src="imgprogrmacion2/1.webp" alt="Logo 2">
+                <img src="imgprogrmacion2/2.png" alt="Logo 3">
+                <img src="imgprogrmacion2/3.png" alt="Logo 4">
+                <img src="imgprogrmacion2/10.png" alt="Logo 5">
+                <img src="imgprogrmacion2/images (11).png" alt="Logo 6">
+                <img src="imgprogrmacion2/12.png" alt="Logo 6">
+                <img src="imgprogrmacion2/13.png" alt="Logo 7">
+                <img src="imgprogrmacion2/41718343.png" alt="Logo 8">
+            </div>
+        </div>
+        <div id="Algoritmos de Ordenamiento y Búsqueda" class="main-section" data-aos="fade-down" data-aos-duration="900">
+            <h1>Algoritmos de Ordenamiento y Búsqueda</h1>
+        </div>
+        <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+            <div>
+                 <h2>🌐 Cursos y Tutoriales Completo sobre Algoritmos de Ordenamiento y Búsqueda</h2>
+                 <ol>
+                    <li><p>Coursera - Algoritmos de Stanford University: Curso que cubre en profundidad los algoritmos de ordenamiento, búsqueda y otros. Ideal para una comprensión sólida.</p></li>
+                    <a target="_blank"href="https://www.coursera.org/learn/algorithms-divide-conquer">🌐 Coursera</a><br>
+                    <br><li><p>Khan Academy - Algoritmos de Ordenamiento y Búsqueda: Curso gratuito y detallado sobre algoritmos de ordenamiento como burbuja, selección, inserción y búsqueda binaria.</p></li>
+                    <a target="_blank"href="https://www.khanacademy.org/computing/computer-science/algorithms>">🌐 Khan Academy</a><br>
+                    <br><li><p>MIT OpenCourseWare - Algoritmos de Ordenamiento y Búsqueda: Material completo en video de la Universidad MIT</p></li>
+                    <a target="_blank"href="https://ocw.mit.edu>">🌐 MIT OpenCourseWare</a>
+                 </ol>
+            </div>
+            <div>
+                <h2>Guías y Artículos</h2>
+                <ol>
+                    <li><p>GeeksforGeeks - Algoritmos de Ordenamiento y Búsqueda: Amplia colección de guías y ejemplos de implementación de todos los algoritmos de ordenamiento y búsqueda.</p></li>
+                    <a target="_blank"href="https://www.geeksforgeeks.org">🌐 GeeksforGeeks</a><br>
+                    <br><li><p>Programiz - Guía de Ordenamiento y Búsqueda: Explicación de los algoritmos básicos y avanzados de ordenamiento con pseudocódigo y diagramas.</p></li>
+                    <a target="_blank"href="https://www.programiz.com">🌐 Programiz</a><br>
+                    <br><li><p>JavaTpoint - Algoritmos de Ordenamiento: Incluye algoritmos básicos y avanzados con diagramas de flujo y ejemplos en Java.</p></li>
+                    <a target="_blank"href="https://www.javatpoint.com">🌐 JavaTpoint</a>
+                </ol>
+            </div>
+            <div>
+                <h2>📚 Libros Gratuitos y Documentación</h2>
+                <ol>
+                    <li><p>"Introduction to Algorithms" de Cormen, Leiserson, Rivest y Stein: Conocido como "CLRS", es una de las referencias más completas sobre algoritmos, cubriendo ampliamente los algoritmos de ordenamiento y búsqueda. Puedes encontrarlo en bibliotecas digitales.</p></li>
+                    <li><p>"Algorithms" de Robert Sedgewick y Kevin Wayne: Este libro tiene una sección dedicada a algoritmos de ordenamiento y búsqueda, con implementaciones en Java.</p></li>
+                    <a target="_blank"href="https://www.princeton.edu">🌐 Princeton University</a><br>
+                </ol>
+            </div>
+            <div>
+                <h2>Visualizaciones y Simulaciones Interactivas</h2>
+                <ol>
+                    <li><p>Visualgo: Plataforma interactiva que permite visualizar paso a paso cómo funcionan los algoritmos de ordenamiento y búsqueda.</p></li>
+                    <a target="_blank"href="https://visualgo.net/en">🌐 Visualgo</a><br>
+                    <li><p>Sorting Algorithm Animations: Sitio con animaciones de varios algoritmos de ordenamiento que muestra la comparación y el movimiento de datos</p></li>
+                    <a target="_blank"href="https://www.toptal.com/developers/sorting-algorithms">🌐 Sorting Algorithm Animations</a>
+                </ol>
+            </div>
+            <div>
+                <h2>🎯 Ejercicios y Prácticas</h2>
+                <ol>
+                    <li><p>HackerRank - Data Structures and Algorithms: Contiene una sección para practicar algoritmos de ordenamiento y búsqueda en múltiples lenguajes.</p></li>
+                    <a target="_blank"href="https://www.hackerrank.com">🌐 HackerRank</a><br>
+                    <li><p>LeetCode - Sorting and Searching Problems: Ejercicios específicos de búsqueda y ordenamiento, ordenados por nivel de dificultad.</p></li>
+                    <a target="_blank"href="https://codefinity.com/get-started/spa/v8_new_brl?utm_source=google&utm_medium=cpc&utm_campaign=21415070126&utm_content=162332657925&utm_term=leetcode&dki=Leetcode&gad_source=1&gclid=CjwKCAiA3Na5BhAZEiwAzrfagCsAjlOuJ5s3XVxnPP7xfyR6AnbPPF0yxmBikuNQouYcgMkEGyH7choCv_sQAvD_BwE">🌐 LeetCode</a>
+                    <li><p>CodeSignal - Algoritmos de Búsqueda y Ordenamiento: Esta plataforma tiene desafíos de programación específicos para algoritmos de ordenamiento y búsqueda.</p></li>
+                    <a target="_blank"href="https://codesignal.com">🌐 CodeSignal</a>
+                </ol>
+            </div>
+        </div>
+        <div class="logo-slider">
+            <div class="logo-container">
+                <img src="imgprogrmacion2/06bnqFCCqMYNmhahHfpuUFs-13.webp" alt="Logo 1">
+                <img src="imgprogrmacion2/khan-academy-review-logo-big.o.avif" alt="Logo 2">
+                <img src="imgprogrmacion2/2.png" alt="Logo 3">
+                <img src="imgprogrmacion2/10.png" alt="Logo 4">
+                <img src="imgprogrmacion2/3.png" alt="Logo 5">
+                <img src="imgprogrmacion2/images (11).png" alt="Logo 6">
+                <img src="imgprogrmacion2/princeton-logo.jpg" alt="Logo 7">
+                <img src="imgprogrmacion2/13.png" alt="Logo 8">
+                <img src="imgprogrmacion2/41718343.png" alt="Logo 9">
+                <img src="imgprogrmacion2/images (16).png" alt="Logo 10">
+            </div>
+        </div>
+        <div id="NIVEL II" class="main-section" data-aos="fade-down" data-aos-duration="900">
+            <h1>NIVEL II</h1>
+        </div>
+        <div class="info-section" data-aos="fade-down" data-aos-duration="900">
+            <div>
+                <h2> Recursión</h2>
+                <ol>
+                    <li><p>Introducción a la recursión en programación - Artículo que explica los conceptos básicos de recursión, con ejemplos en varios lenguajes:</p></li>
+                    <a target="_blank"href="https://www.programiz.com/c-programming/c-recursion">🌐 Introducción a la recursión en programación</a><br>
+                    <br><li><p>Recursión y sus aplicaciones en algoritmos - Una guía completa sobre cómo la recursión se aplica en algoritmos de búsqueda, ordenamiento, y estructuras de datos:</p></li>
+                    <a target="_blank"href="https://www.geeksforgeeks.org/introduction-to-recursion-2/">🌐 Recursión y sus aplicaciones en algoritmos</a><br>
+                    <br><li><p>Recursión en Python: Ejemplos y mejores prácticas - Un tutorial específico sobre recursión en Python que incluye ejemplos prácticos:</p></li>
+                    <a target="_blank"href="https://realpython.com/python-recursion/">🌐 Recursión en Python</a><br>
+                    <br><li><p>Recursión vs Iteración - Una comparación entre el enfoque recursivo y el iterativo, para entender cuándo es más eficiente utilizar cada uno:</p></li>
+                    <a target="_blank"href="https://www.freecodecamp.org/espanol/news/explicacion-de-la-memoizacion-recursion-y-bucles-for-en-python/">🌐 Recursión vs Iteración</a><br>
+                    <br><li><p>Ejercicios de práctica de recursión - Conjunto de ejercicios prácticos para mejorar las habilidades en recursión:</p></li>
+                    <a target="_blank"href="https://www.hackerrank.com/contests/maraton-umb/challenges/test-maraton-umb-factorial">🌐 Ejercicios de práctica de recursión</a><br>
+                </ol>
+            </div>
+            <div>
+                <h2>Manejo de Excepciones y Errores</h2>
+                <ol>
+                    <li><p>Manejo de excepciones en Python - Una guía sobre cómo utilizar try, except, else y finally en Python:</p></li>
+                    <a target="_blank"href="https://www.programiz.com/python-programming/exception-handling">🌐 Manejo de excepciones en Python</a><br>
+                    <br><li><p>Manejo de errores y excepciones en Java - Explicación de cómo Java implementa el manejo de errores con ejemplos de try-catch y excepciones personalizadas:</p></li>
+                    <a target="_blank"href="https://www.geeksforgeeks.org/exceptions-in-java/">🌐 Manejo de errores y excepciones en Java</a><br>
+                    <br><li><p>Buenas prácticas para el manejo de excepciones - Consejos y prácticas recomendadas para implementar manejo de excepciones de forma eficiente:</p></li>
+                    <a target="_blank"href="https://www.jetbrains.com/profiler/?source=google&medium=cpc&campaign=AMER_en_AMER_Profiler_Search&term=stackify&content=504822898069&gad_source=1&gclid=CjwKCAiA3Na5BhAZEiwAzrfagBj8kv7PWHsgVk5hY15S9O1kRLmRalD3PN33SqPjB3bowBm2CUsw6BoCLDMQAvD_BwE">🌐 Buenas prácticas para el manejo de excepciones</a><br>
+                    <br><li><p>Diferencia entre errores y excepciones - Análisis detallado de los tipos de errores y excepciones, con ejemplos en distintos lenguajes:</p></li>
+                    <a target="_blank"href="https://www.tutorialspoint.com/java/java_exceptions.htm">🌐 Diferencia entre errores y excepciones</a><br>
+                    <br><li><p>Ejercicios sobre manejo de excepciones - Ejercicios prácticos de manejo de errores y excepciones:</p></li>
+                    <a target="_blank"href="https://edabit.com/challenges">🌐 Ejercicios sobre manejo de excepciones</a><br>
+                </ol>
+            </div>
+            <div>
+                <h2>Introducción a Archivos y Persistencia de Datos</h2>
+                <ol>
+                    <li><p>Manejo de archivos en Python - Explicación de cómo abrir, leer, escribir y cerrar archivos en Python, junto con la importancia de la persistencia de datos:</p></li>
+                    <a target="_blank"href="https://www.freecodecamp.org/espanol/news/manejo-de-archivos-en-python-como-crear-leer-y-escribir-en-un-archivo/">🌐 Manejo de archivos en Python</a><br>
+                    <br><li><p>Archivos y persistencia de datos en Java - Guía completa sobre la manipulación de archivos en Java usando clases como File, FileReader, y FileWriter:</p></li>
+                    <a target="_blank"href="https://www.w3schools.com/java/java_files.asp">🌐 Archivos y persistencia de datos en Java</a><br>
+                    <br><li><p>Introducción a la persistencia de datos - Conceptos básicos sobre la persistencia, cómo los datos pueden guardarse en archivos o bases de datos para ser reutilizados:</p></li>
+                    <a target="_blank"href="https://keepcoding.io/blog/que-es-la-persistencia-de-datos-en-sql/">🌐 Introducción a la persistencia de datos</a><br>
+                    <br><li><p>Almacenamiento de datos con archivos JSON - Cómo utilizar archivos JSON para almacenar y recuperar datos en aplicaciones modernas:</p></li>
+                    <a target="_blank"href="https://developer.mozilla.org/es/docs/Learn/JavaScript/Objects/JSON">🌐 Almacenamiento de datos con archivos JSON</a><br>
+                    <br><li><p>Buenas prácticas para el manejo de archivos - Consejos para un manejo eficiente y seguro de archivos en distintos lenguajes de programación:</p></li>
+                    <a target="_blank"href="https://es.stackoverflow.com/tags/buenas-prácticas/info">🌐 Buenas prácticas para el manejo de archivos</a><br>
+                </ol>
+            </div>
+            <div>
+                <h2> Introducción a Patrones de Diseño</h2>
+                <ol>
+                    <li><p>Patrones de diseño en programación orientada a objetos - Explicación de qué son los patrones de diseño, por qué son útiles y cómo mejoran la arquitectura del software:</p></li>
+                    <a target="_blank"href="https://refactoring.guru/es/design-patterns">🌐 Patrones de diseño</a><br>
+                    <br><li><p>Los tres tipos principales de patrones de diseño - Un resumen de los patrones creacionales, estructurales y de comportamiento, con ejemplos básicos:</p></li>
+                    <a target="_blank"href="https://www.geeksforgeeks.org/software-design-patterns/">🌐 Patrones de diseño en GeeksforGeeks</a><br>
+                    <br><li><p>Patrones de diseño en Java - Ejemplos de implementación de patrones de diseño populares como Singleton, Factory y Observer en Java:</p></li>
+                    <a target="_blank"href="https://refactoring.guru/es/design-patterns/java">🌐 Patrones de diseño en java</a><br>
+                    <br><li><p>Los patrones de diseño más usados - Artículo que aborda los patrones más utilizados, como el patrón de fábrica (Factory) y el patrón de estrategia (Strategy), con ejemplos en distintos lenguajes:</p></li>
+                    <a target="_blank"href="https://www.digitalocean.com/community/tutorials/java-design-patterns-example-tutorial">🌐 Patrones de diseño en DigitalOcean</a><br>
+                    <br><li><p>Ejercicios de patrones de diseño - Ejercicios prácticos para aplicar patrones de diseño en proyectos reales:</p></li>
+                    <a target="_blank"href="https://codegym.cc/es/">🌐 Ejercicios en CodeGym</a>
+                </ol>
+            </div>
+            <div>
+                <h2>Programación Funcional Básica </h2>
+                <ol>
+                    <li><p>Introducción a la programación funcional - Explicación de los principios básicos de la programación funcional, como la inmutabilidad, las funciones puras, y la ausencia de efectos secundarios:</p></li>
+                <a target="_blank"href="https://www.freecodecamp.org/espanol/news/que-es-la-programacion-funcional-una-guia-de-javascript-para-principiantes/">🌐 Introducción a la programación funcional en FreeCodeCamp</a><br>
+                <br><li><p>Conceptos fundamentales en programación funcional - Artículo sobre conceptos clave como funciones de orden superior, composición de funciones y recursión en programación funcional:</p></li>
+                <a target="_blank"href="https://www.manualweb.net/java/conceptos-basicos-java/">🌐 Conceptos Básicos en Java</a><br>
+                <br><li><p>Programación funcional en Python - Ejemplos y explicación de cómo aplicar programación funcional en Python utilizando funciones como map, filter, y reduce:</p></li>
+                <a target="_blank"href="https://ellibrodepython.com/programacion-funcional-python">🌐Programación funcional en Real Python</a><br>
+                <br><li><p>Introducción a la programación funcional en JavaScript - Tutorial que aborda cómo aplicar los principios de programación funcional en JavaScript:</p></li>
+                <a target="_blank"href="https://developer.mozilla.org/es/docs/Web/JavaScript">🌐 Programación funcional en JavaScript en MDN</a><br>
+                <br><li><p>Ventajas y desventajas de la programación funcional - Una mirada a los pros y contras de la programación funcional y cuándo es más útil:</p></li>
+                <a target="_blank"href="https://www.studocu.com/es-mx/messages/question/5426552/cuales-son-las-ventajas-desventajas-y-que-se-entiende-por-programacion-funcional">🌐 Ventajas y desventajas</a>
+            </div>
+            <div>
+                <h2>Aplicación en Proyectos y Desarrollo de Software</h2>
+                <ol>
+                    <li><p>Buenas prácticas de desarrollo de software - Conjunto de principios para el desarrollo de software eficiente, incluyendo modularidad, reutilización de código, y uso de patrones de diseño:</p></li>
+                    <a target="_blank"href="https://www.sydle.com/es/blog/clean-code-602bef23da4d09680935509b">🌐 Buenas prácticas</a><br>
+                    <br><li><p>Metodologías de desarrollo ágil - Descripción de metodologías ágiles como Scrum y Kanban, que permiten manejar mejor el tiempo y los recursos en proyectos de software:</p></li>
+                    <a target="_blank"href="https://www.atlassian.com/es/agile">🌐 Guía de desarrollo ágil en Atlassian</a><br>
+                    <br><li><p>Planificación y gestión de proyectos de software - Estrategias para definir requisitos, gestionar cambios y organizar equipos de desarrollo:</p></li>
+                    <a target="_blank"href="https://trial.wrike.com/es/latam-wrike-project-software/?targetID=kwd-12217897514&gclsrc=aw.ds&ga_campaign=11647603606&ga_adgroup=117008964167&ga_keyword=wrike&gad_source=1&gclid=CjwKCAiA3Na5BhAZEiwAzrfagHnSwpmHKVgi8Y_UnCEZM8Df0Wgm38IFg0CjqXlWMnQbv4o8tJQVnBoCzd8QAvD_BwE">🌐 Gestión de proyectos de software en Wrike</a><br>
+                    <br><li><p>Ciclo de vida de desarrollo de software (SDLC) - Una visión general del ciclo de vida de desarrollo de software, desde el análisis de requisitos hasta el mantenimiento:</p></li>
+                    <a target="_blank"href="https://www.guru99.com/es/software-development-life-cycle-tutorial.html">🌐 SDLC en Guru99</a><br>
+                    <br><li><p>Herramientas para el desarrollo de software - Artículo sobre herramientas útiles para la colaboración y el control de versiones, como Git, JIRA y Trello:</p></li>
+                    <a target="_blank"href="https://dev.to/sebasttiandaza/12-herramienta-utiles-que-todo-desarrollador-deberia-de-tener-dkg">🌐 Herramientas para desarrollo en Dev.to</a>
+
+                </ol>
+            </div>
+        </div>
+        <div class="logo-slider">
+            <div class="logo-container">
+                <img src="imgprogrmacion2/10.png" alt="Logo 1">
+                <img src="imgprogrmacion2/3.png" alt="Logo 2">
+                <img src="imgprogrmacion2/images (5).png" alt="Logo 3">
+                <img src="imgprogrmacion2/13.png" alt="Logo 4">
+                <img src="imgprogrmacion2/19.png" alt="Logo 5">
+                <img src="imgprogrmacion2/20.png" alt="Logo 6">
+                <img src="imgprogrmacion2/21.jpg" alt="Logo 8">
+                <img src="imgprogrmacion2/22.png" alt="Logo 9">
+                <img src="imgprogrmacion2/23.png" alt="Logo 10">
+                <img src="imgprogrmacion2/24.png" alt="Logo 11">
+                <img src="imgprogrmacion2/25.png" alt="Logo 12">
+                <img src="imgprogrmacion2/28.webp" alt="Logo 13">
+                <img src="imgprogrmacion2/leklhSoR_400x400.jpg" alt="Logo 14">
+                <img src="imgprogrmacion2/30.png" alt="Logo 15">
+                <img src="imgprogrmacion2/31.png" alt="Logo 16">
+                <img src="imgprogrmacion2/32.png" alt="Logo 16">
+                <img src="imgprogrmacion2/33.jpg" alt="Logo 17">
+                <img src="imgprogrmacion2/34.webp" alt="Logo 18">
+                <img src="imgprogrmacion2/35.jpg" alt="Logo 19">
+                <img src="imgprogrmacion2/https___dev-to-uploads.s3.amazonaws.com_uploads_organization_profile_image_1_d908a186-5651-4a5a-9f76-15200bc6801f.jpg" alt="Logo 20">
+            </div>
+    </div>
+    <script>
+        // Función para mostrar/ocultar el menú móvil
+        function toggleMenu() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            mobileMenu.classList.toggle('open');
+        }
+    </script>
+</body>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+  AOS.init();
+</script>
+</html>
